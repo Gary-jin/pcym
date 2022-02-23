@@ -1,0 +1,131 @@
+{
+	"pages": [{
+			"path": "pages/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/nav1/n1_expire/index",
+			"style": {
+				"navigationBarTitleText": "过期域名"
+			}
+		},
+		{
+			"path": "pages/nav1/n4_auction/index",
+			"style": {
+				"navigationBarTitleText": "竞价域名"
+			}
+		},
+		{
+			"path": "pages/nav1/n4_auction/detail",
+			"style": {
+				"navigationBarTitleText": "竞价详情"
+			}
+		},
+		
+		{
+			"path": "pages/nav1/n2_ymYd/index",
+			"style": {
+				"navigationBarTitleText": "域名预定"
+			}
+		},
+		
+		{
+			"path": "pages/nav2/n1_hotWz/index",
+			"style": {
+				"navigationBarTitleText": "热门网站"
+			}
+		},
+		{
+			"path": "pages/nav2/n1_hotWz/detail",
+			"style": {
+				"navigationBarTitleText": "网站详情"
+			}
+		},
+		{
+			"path": "pages/nav3/n1_buy/index",
+			"style": {
+				"navigationBarTitleText": "一口价"
+			}
+		},
+		{
+			"path": "pages/nav3/n1_buy/detailBuySingle",
+			"style": {
+				"navigationBarTitleText": "域名详情" 
+			}
+		},
+		{
+			"path": "pages/nav3/n1_buy/detailBuyMore",
+			"style": {
+				"navigationBarTitleText": "域名详情" 
+			}
+		},
+		{
+			"path": "pages/nav4/n1_brand/index",
+			"style": {
+				"navigationBarTitleText": "热门商标" 
+			}
+		},
+		{
+			"path": "pages/nav4/n1_brand/detailBrand",
+			"style": {
+				"navigationBarTitleText": "商标详情" 
+			}
+		},
+		{
+			"path": "pages/nav4/n1_brand/contact",
+			"style": {
+				"navigationBarTitleText": "联系经济人" //商标 
+			}
+		},
+		{
+			"path": "pages/nav5/n1_mt/index",
+			"style": {
+				"navigationBarTitleText": "热门新媒体" //商标 
+			}
+		},
+		{
+			"path": "pages/nav5/n1_mt/detail",
+			"style": {
+				"navigationBarTitleText": "新媒体详情" //商标 
+			}
+		},
+		
+		{
+			"path": "pages/managementCenter/index",
+			"style": {
+				"navigationBarTitleText": "管理中心" //商标 
+			}
+		},
+		
+		{
+			"path": "pages/user/login/index",
+			"style": {
+				"navigationBarTitleText": "登录" 
+			}
+		},
+		{
+			"path": "pages/user/register/index",
+			"style": {
+				"navigationBarTitleText": "注册" 
+			}
+		},
+		{
+			"path": "pages/user/register/agreement",
+			"style": {
+				"navigationBarTitleText": "注册协议" 
+			}
+		},
+		{
+			"path": "pages/user/password/retrieve",
+			"style": {
+				"navigationBarTitleText": "找回密码" 
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"backgroundColor": "#FFFFFF"
+	}
+}
