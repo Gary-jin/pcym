@@ -40,6 +40,7 @@
 		computed: {
 			...mapState({
 				userInfo: ({ user }) => user.userInfo,
+				token: ({ user })  => user.token,
 			})
 		},
 		onLoad() {
@@ -48,6 +49,7 @@
 		onShow() {
 			this.getUserInfo()
 			// this.getOrderList()
+			console.log('token',this.token);
 		},
 		onHide() {
 			
