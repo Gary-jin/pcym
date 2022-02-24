@@ -40,7 +40,7 @@
 		computed: {
 			...mapState({
 				userInfo: ({ user }) => user.userInfo,
-				token: ({ user })  => user.token,
+				token: ({ user })  => user,
 			})
 		},
 		onLoad() {
@@ -50,6 +50,8 @@
 			this.getUserInfo()
 			// this.getOrderList()
 			console.log('token',this.token);
+			
+			console.log('num',Number(12345.1235).toLocaleString());
 		},
 		onHide() {
 			

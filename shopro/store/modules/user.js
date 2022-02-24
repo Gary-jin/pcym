@@ -3,7 +3,7 @@ import http from '@/shopro/request/index'
 import store from '@/shopro/store'
 
 const state = {
-	token: uni.getStorageSync("token") || "1234",
+	token: uni.getStorageSync("token") || "",
 	isLogin: uni.getStorageSync("isLogin") || false, // 是否登陆
 	userInfo: uni.getStorageSync("userInfo") || {}, // 用户信息
 }
@@ -70,8 +70,23 @@ const actions = {
 	showAuthModal({
 		commit
 	}, type = 'accountLogin') {
-		// commit('AUTH_TYPE', type);
-		console.log('登录跳转');
+		let callbackUrl = '/'+(getCurrentPages()[getCurrentPages().length - 1]).route;
+		return
+		
+		uni.showModal({
+			title: '提示',
+			content: '您还未登录，请登录后再试！',
+			success: function (res) {
+				if (res.confirm) {
+					uni.navigateTo({
+						url: `/pages/user/login/index?callbackUrl=${callbackUrl}`
+					});
+				} else if (res.cancel) {
+						console.log('用户点击取消');
+				}
+			}
+		});
+		
 	},
 
 	// 退出登录

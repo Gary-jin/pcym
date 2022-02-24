@@ -73,7 +73,10 @@
 				height: 69px;
 			}
 		}
+		
 		.titR:hover{
+			transition: all .3s;
+			transform: scale(1.08);
 			cursor:pointer			
 		}
 	}

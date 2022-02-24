@@ -132,15 +132,19 @@
 					}
 				}
 			}
-			.rmdCard:hover .jBtn{
-				background-color: #2587FF;
-				border: #2587FF;
-				color: #FFFFFF;
-				.gg1{
-					display: none;
-				}
-				.gg2{
-					display: block;
+			.rmdCard:hover {
+				transition: all .5s;
+				transform: scale(1.04);
+				.jBtn{
+					background-color: #2587FF;
+					border: #2587FF;
+					color: #FFFFFF;
+					.gg1{
+						display: none;
+					}
+					.gg2{
+						display: block;
+					}
 				}
 			}
 			

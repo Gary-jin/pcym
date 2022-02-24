@@ -88,7 +88,7 @@
 				background-color: #1B4299;
 			}
 			.cardS:hover{
-				transition: all .2s;
+				transition: all .5s;
 				transform: scale(1.08);
 				color: #FFE50E;
 			}
@@ -109,6 +109,10 @@
 			flex-wrap: wrap;
 			justify-content: space-between;
 			margin-bottom: 80px;
+			.rmdCard:hover{
+				transition: all .5s;
+				transform: scale(1.04);
+			}
 			.rmdCard{
 				width: 280px;
 				height: 160px;

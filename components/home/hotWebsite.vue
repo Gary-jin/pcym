@@ -80,6 +80,10 @@
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-between;
+			.rmdCard:hover{
+				transition: all .5s;
+				transform: scale(1.02);
+			}
 			.rmdCard{
 				width: 280px;
 				height: 360px;

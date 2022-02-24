@@ -107,6 +107,8 @@
 			}
 			
 			.rmdCard:hover {
+				transition: all .5s;
+				transform: scale(1.02);
 				.bot{
 					background-color: #4F80FF;
 					.pl,.bbom{

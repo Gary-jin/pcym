@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 登录提示 -->
-		<view class="f_cc topbar">
+		<view class="f_cc topbar" v-if="isLogin">
 			<view class="core_f">
 				<view class="topbar_welcome">您好，欢迎来到...！</view>
 				<a class="topbar_login">
@@ -10,6 +10,38 @@
 				<a class="topbar_login">
 					<navigator class="nav-item" :url="`/pages/user/register/index?callbackUrl=${callbackUrl}`">注册</navigator>
 				</a>
+			</view>
+		</view>
+		<view class="f_cc topbar" v-else>
+			<view class="core_f">
+				<view class="topbar_welcome" style="padding-right: 15px;">欢迎回来</view>
+				<view class="userBox userBox2">
+					ID：
+					<text class="main">999888</text>
+					（普通会员）
+				</view>
+				<view class="userBox userBox2">
+					总金额：
+					<text class="redTe">999888</text>
+				</view>
+				<view class="userBox userBox2">
+					可用：
+					<text class="redTe">999888</text>
+				</view>
+				<view class="userBox userBox2">
+					消息：(<text class="redTe">
+						<navigator class="nav-item" style="display: inline-block;" :url="`/pages/managementCenter/index?tab=1-4`">2</navigator>
+					</text>)
+				</view>
+				<view class="userBox userBox2">
+					<text class="main">
+						<navigator class="nav-item" :url="`/pages/managementCenter/index?tab=3-1`">充值</navigator>
+					</text>
+				</view>
+				<view class="userBox userBox2">
+					<text  @click="dialogVisible = true" class="main">退出</text>
+				</view>
+				
 			</view>
 		</view>
 		<!-- 头部 -->
@@ -43,11 +75,23 @@
 				</view>
 			</view>
 		</view>
+		
+		<el-dialog
+		  title="提示"
+		  :visible.sync="dialogVisible"
+		  width="30%">
+		  <span>是否退出登录！</span>
+		  <span slot="footer" class="dialog-footer">
+		    <el-button @click="dialogVisible = false">取 消</el-button>
+		    <el-button type="primary" @click="quit()">确 定</el-button>
+		  </span>
+		</el-dialog>
+		
 	</view>
 </template>
 
 <script>
-	import {mapGetters} from 'vuex';
+	import {mapMutations,mapActions,mapState} from 'vuex';
 
 	export default {
 		components: {
@@ -67,7 +111,7 @@
 					{name:'污染查询',type:3},
 					{name:'拦截检测',type:4},
 				],
-				callbackUrl:'/'+(getCurrentPages()[getCurrentPages().length - 1]).route,
+				dialogVisible: false
 			}
 		},
 		watch: {
@@ -75,10 +119,13 @@
 		activated() {
 		},
 		computed: {
-			...mapGetters(['hasLogin'])
+			...mapState({
+				userInfo: ({ user }) => user.userInfo,
+				isLogin: ({ user })  => user.isLogin,
+			})
 		},
 		mounted() {
-			console.log(this.callbackUrl);
+			
 		},
 		methods: {
 			tabs(index){
@@ -99,6 +146,17 @@
 				uni.navigateTo({
 				    url: `/pages/user/login/index?callbackUrl=${callbackUrl}`
 				});
+			},
+			// handleClose(done) {
+			// 	console.log(done);
+			// 	// this.$confirm('确认关闭？')
+			// 	// 	.then(_ => {
+			// 	// 		done();
+			// 	// 	})
+			// 	// 	.catch(_ => {});
+			// }
+			quit(){
+				this.dialogVisible = false
 			}
 		}
 	}
@@ -182,6 +240,16 @@
 					}
 				}
 			}
+		}
+	}
+	
+	.userBox2{
+		padding-right: 15px;
+		.main{
+			color: $text-color-main;
+		}
+		.redTe{
+			color: #fe2522;
 		}
 	}
 </style>

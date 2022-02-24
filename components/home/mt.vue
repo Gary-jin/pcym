@@ -153,6 +153,8 @@
 			}
 		}
 		.rmdCard:hover{
+			transition: all .5s;
+			transform: scale(1.02);
 			.boverBox{
 				bottom: 0;
 			}
