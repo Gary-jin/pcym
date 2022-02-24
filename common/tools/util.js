@@ -81,5 +81,62 @@ export default {
 			}
 		})
 		return str.length;
-	}
+	},
+	/**
+	 * 
+	 */
+	formPath(val){
+		let route = '/'+(getCurrentPages()[getCurrentPages().length - 1]).route
+		let url = window.location.href;
+		let options = ''
+		if (url.indexOf("?") != -1) {
+			options = url.split("?")[1]
+		}
+		let path = route +'?'+ options
+		uni.setStorageSync('fromLogin',path);
+		return ;
+	},
+	/**
+		 * 剩余时间格式化
+		 * @param {Number} t - 剩余多少秒
+		 * @return {Object}  format - 格式后的天时分秒对象
+		 */
+		format(t) {
+			let format = {
+				d: '00',
+				h: '00',
+				m: '00',
+				s: '00'
+			};
+			if (t > 0) {
+				let d = Math.floor(t / 86400);
+				let h = Math.floor((t / 3600) % 24);
+				let m = Math.floor((t / 60) % 60);
+				let s = Math.floor(t % 60);
+				format.d = d < 10 ? '0' + d : d;
+				format.h = h < 10 ? '0' + h : h;
+				format.m = m < 10 ? '0' + m : m;
+				format.s = s < 10 ? '0' + s : s;
+			}
+			return format;
+		},
+		formatsym(t) {
+			let format = {
+				d: '00',
+				h: '00',
+				m: '00',
+				s: '00'
+			};
+			if (t > 0) {
+				let d = Math.floor(t / 86400);
+				let h = Math.floor((t / 3600) % 24);
+				let m = Math.floor((t / 60) % 60);
+				let s = Math.floor(t % 60);
+				format.d = d < 10 ?  d : d;
+				format.h = h < 10 ? '0' + h : h;
+				format.m = m < 10 ? '0' + m : m;
+				format.s = s < 10 ? '0' + s : s;
+			}
+			return format.d + '天' + format.h+ '时' + format.m + '分' ;
+		},
 }

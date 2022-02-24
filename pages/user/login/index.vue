@@ -16,7 +16,7 @@
 					<!-- 登录表单 -->
 					<form class="form form-password" @submit="accountLogin" @keydown.enter="accountLogin">
 						<view class="form-item">
-							<input class="input" placeholder="邮箱/手机号码" maxlength="30" v-model="formData.account" />
+							<input class="input" placeholder="手机号码" maxlength="30" v-model="formData.account" />
 						</view>
 						<view class="form-item">
 							<input class="input" placeholder="密码" maxlength="20" password v-model="formData.password" />
@@ -39,13 +39,13 @@
 					<form class="form form-smscode" @submit="captchaLogin" @keydown.enter="captchaLogin">
 						<view class="form-item">
 							<view class="country-code">+86</view>
-							<input class="input" placeholder="手机号码" maxlength="11" type="number" v-model="formData.phone" />
+							<input class="input" placeholder="手机号码" maxlength="11" type="number" v-model="formData.mobile" />
 						</view>
 						<view class="form-item">
 							<input class="input" placeholder="短信验证码" maxlength="6" type="number" v-model="formData.captcha" />
 							<view class="btn-send" :class="{'disabled': sendCode.disabled}" @click="sendSMSCode">{{sendCode.text}}</view>
 						</view>
-						<button class="btn-primary" form-type="submit">立即登录/注册</button>
+						<button class="btn-primary" form-type="submit">立即登录</button>
 					</form>
 					<!-- 相关链接 -->
 					<view class="card-footer">
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+	import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 	export default {
 		data() {
 			return {
@@ -66,7 +67,7 @@
 				formData: {
 					account: '',
 					password: '',
-					phone: '',
+					mobile: '',
 					captcha: ''
 				},
 				sendCode: {
@@ -80,6 +81,7 @@
 			if (e.callbackUrl) this.callbackUrl = e.callbackUrl;
 		},
 		methods: {
+				...mapActions(['getUserInfo','setTokenAndBack']),
 			accountLogin() {
 				const {
 					account,
@@ -96,35 +98,38 @@
 					title: '登录中...',
 					mask: true
 				});
-				this.$util.request('/login', {
-					account,
-					password
-				}, (res) => {
+				
+				
+				this.$http('user.login', {account,password}, '').then(res => {
 					uni.hideLoading();
-
-					if (res.state == 'ok') {
-						this.loginSuccess(res.loginUser);
-					} else {
-						this.$util.showErrorMsg(res.msg);
+					if (res.code === 1) {
+						this.getUserInfo(res.data.userinfo.token);
+						this.setTokenAndBack()
 					}
 				});
+				
+				
+				
 			},
 			sendSMSCode() {
+				const {
+					mobile
+				} = this.formData;
 				if (this.sendCode.disabled) return;
-				if (!this.$regular.phoneNumber.test(this.formData.phone)) {
+				if (!this.$regular.phoneNumber.test(mobile)) {
 					return this.$util.showErrorMsg('请输入正确的手机号');
 				}
 
 				this.sendCode.disabled = true;
 				this.sendCode.text = '发送中...';
-
 				new Promise((resolve, reject) => {
-					this.$util.request('/login/sendSMSCaptcha', {
-						phone: this.formData.phone
-					}, (res) => {
-						if (res.state == 'ok') {
-							resolve();
-						} else {
+					this.$http('user.send', {
+						mobile: mobile,
+						event: 'mobilelogin'
+					}, '').then(res => {
+						if (res.code === 1) {
+							this.$util.showErrorMsg(res.msg);
+						} else{
 							reject(res.msg);
 						}
 					});
@@ -149,10 +154,10 @@
 			},
 			captchaLogin(e) {
 				const {
-					phone,
+					mobile,
 					captcha
 				} = this.formData;
-				if (!this.$regular.phoneNumber.test(phone)) {
+				if (!this.$regular.phoneNumber.test(mobile)) {
 					return this.$util.showErrorMsg('请输入正确的手机号');
 				}
 				if (!this.$regular.captcha.test(captcha)) {
@@ -163,25 +168,12 @@
 					title: '登录中...',
 					mask: true
 				});
-				this.$util.request('/login/captchaLogin', {
-					phone,
-					captcha
-				}, (res) => {
-					uni.hideLoading();
-
-					if (res.state == 'ok') {
-						this.loginSuccess(res.loginUser);
-					} else {
-						this.$util.showErrorMsg(res.msg);
-					}
-				});
-			},
-			loginSuccess(loginUser) {
-				this.$store.commit('login', loginUser);
-				this.$cart.syncCart();
 				
-				uni.redirectTo({
-					url: this.callbackUrl || '/pages/index'
+				this.$http('user.mobilelogin',{mobile,captcha}, '').then(res => {
+					if (res.code === 1) {
+						this.getUserInfo(res.data.userinfo.token);
+						this.setTokenAndBack()
+					} 
 				});
 			}
 		}

@@ -11,7 +11,7 @@
 				</view>
 				<form class="card-body" @submit="retrieve">
 					<view class="form-item">
-						<input class="input" placeholder="邮箱/手机号码" name="account" maxlength="30" v-model="account" />
+						<input class="input" placeholder="手机号码" name="mobile" maxlength="30" v-model="mobile" />
 					</view>
 					<view class="form-item">
 						<input class="input" placeholder="验证码" name="captcha" maxlength="6" type="number" />
@@ -21,7 +21,7 @@
 						<input class="input" placeholder="请输入新密码" name="password" maxlength="20" password />
 					</view>
 					<view class="form-item">
-						<input class="input" placeholder="再次输入密码" name="passwordRepeat" maxlength="20" password />
+						<input class="input" placeholder="再次输入密码" name="newpassword" maxlength="20" password />
 					</view>
 					<view class="form-item border-none">
 						<button class="btn-primary" form-type="submit">立即提交</button>
@@ -42,7 +42,7 @@
 	export default {
 		data() {
 			return {
-				account: '',
+				mobile: '',
 				sendCode: {
 					text: '获取验证码',
 					disabled: false
@@ -52,7 +52,7 @@
 		methods: {
 			sendCaptcha() {
 				if (this.sendCode.disabled) return;
-				if (!this.$regular.phoneNumber.test(this.account) && !this.$regular.email.test(this.account)) {
+				if (!this.$regular.phoneNumber.test(this.mobile) && !this.$regular.email.test(this.mobile)) {
 					return this.$util.showErrorMsg('该账号不存在');
 				}
 
@@ -60,12 +60,14 @@
 				this.sendCode.text = '发送中...';
 
 				new Promise((resolve, reject) => {
-					this.$util.request('/security/sendCaptchaForRetrievePwd', {
-						account: this.account
-					}, (res) => {
-						if (res.state == 'ok') {
+					this.$http('user.send', {
+						mobile: this.mobile,
+						event: 'resetpwd'
+					}, '').then(res => {
+						if (res.code === 1) {
 							resolve();
-						} else {
+							this.$util.showErrorMsg(res.msg);
+						} else{
 							reject(res.msg);
 						}
 					});
@@ -96,25 +98,35 @@
 					title: '处理中...',
 					mask: true
 				});
-				this.$util.request('/security/retrievePassword', data, (res) => {
+				
+				this.$http('user.resetpwd', {
+					...data,
+					type:'mobile'
+					}, '').then(res => {
 					uni.hideLoading();
-
-					if (res.state == 'ok') {
-						this.$alert('密码重置成功！', {
-							showCancel: false,
-							confirmText: '立即去登录'
-						}, () => {
-							uni.redirectTo({
-								url: '/pages/user/login/index'
-							});
+					if (res.code === 1) {
+						uni.showModal({
+							title: '密码重置成功',
+							content: '立即去登录',
+							showCancel:false,
+							success: function (res) {
+								if (res.confirm) {
+									uni.navigateTo({
+										url: `/pages/user/login/index`
+									});
+								} else if (res.cancel) {
+										console.log('用户点击取消');
+								}
+							}
 						});
-					} else {
+					} else{
 						this.$util.showErrorMsg(res.msg);
 					}
 				});
+				
 			},
 			checkForm(e) {
-				if (!this.$regular.phoneNumber.test(this.account) && !this.$regular.email.test(this.account)) {
+				if (!this.$regular.phoneNumber.test(this.mobile) && !this.$regular.email.test(this.mobile)) {
 					return this.$util.showErrorMsg('该账号不存在');
 				}
 				if (!this.$regular.captcha.test(e.captcha)) {
@@ -123,7 +135,7 @@
 				if (!this.$regular.password.test(e.password)) {
 					return this.$util.showErrorMsg('密码格式错误');
 				}
-				if (e.passwordRepeat != e.password) {
+				if (e.newpassword != e.password) {
 					return this.$util.showErrorMsg('密码输入不一致');
 				}
 

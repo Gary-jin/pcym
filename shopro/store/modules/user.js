@@ -21,12 +21,11 @@ const actions = {
 		dispatch,
 		getters,
 		state
-	}, token = '') {
+	}, token = '',pathBack) {
 		return new Promise((resolve, reject) => {
 			token && uni.setStorageSync('token', token);
 			http('user.info').then(res => {
 					if (res.code === 1) {
-						let lastLoginStatus = getters.isLogin;
 						commit('userInfo', res.data);
 						commit('isLogin', true);
 						resolve(res.data)
@@ -40,6 +39,24 @@ const actions = {
 				})
 		})
 	},
+	//设置token并返回上次页面
+		setTokenAndBack({
+			commit
+		}, token) {
+			let fromLogin = uni.getStorageSync('fromLogin');
+			console.log('fromLogin',fromLogin);
+			if (fromLogin) {
+				uni.redirectTo({
+						url: fromLogin
+				});
+				uni.removeStorageSync('fromLogin')
+			} else {
+				//默认跳转首页S
+				uni.redirectTo({
+						url: '/pages/index'
+				});
+			}
+		},
 	// 用户其他相关信息
 	getUserData({
 		commit
@@ -70,22 +87,7 @@ const actions = {
 	showAuthModal({
 		commit
 	}, type = 'accountLogin') {
-		let callbackUrl = '/'+(getCurrentPages()[getCurrentPages().length - 1]).route;
-		return
 		
-		uni.showModal({
-			title: '提示',
-			content: '您还未登录，请登录后再试！',
-			success: function (res) {
-				if (res.confirm) {
-					uni.navigateTo({
-						url: `/pages/user/login/index?callbackUrl=${callbackUrl}`
-					});
-				} else if (res.cancel) {
-						console.log('用户点击取消');
-				}
-			}
-		});
 		
 	},
 
@@ -96,7 +98,6 @@ const actions = {
 	}) {
 		uni.getStorageSync('token') && http('user.logout');
 		commit('token', "");
-		uni.removeStorageSync('chatSessionId');
 		commit('isLogin', false);
 		commit('userInfo', {});
 	},

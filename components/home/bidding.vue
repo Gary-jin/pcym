@@ -37,19 +37,28 @@
 		data() {
 			return {
 				title:'热门竞价域名展示',
-				subhead:'一个小标题的注释一个小标题的注释一个小标题的注释'
+				subhead:'一个小标题的注释一个小标题的注释一个小标题的注释',
+				datalist:[]
 			}
 		},
 		onLoad(admin) {
-			console.log('xx');
+			
 		},
 		onShow() {
 			
 		},
-		onHide() {
-			
+		mounted() {
+			// this.getList()
 		},
 		methods: {
+			getList() {
+				let that = this;
+				that.$http('ym.bidhot', {}, '').then(res => {
+					if (res.code === 1) {
+						that.datalist = res.data
+					}
+				});
+			},
 			change(e){
 				console.log('xx');
 			}

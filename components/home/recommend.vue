@@ -2,18 +2,18 @@
 	<view>
 		<!--  -->
 		<view class="f_cc_ls rmdbg">
-			<view class="core_f rmdTop">
+			<view class="core_f rmdTop" @click="goYmList()">
 				<text class="tit1">预定推荐：</text>
-				近期有 <text class="tit2">4598684</text> 个域名即将
+				近期有 <text class="tit2">{{total}}</text> 个域名即将被删除
 			</view>
 			<view class="core_f rmdBto">
-				<view v-for="(item,index) in 15" :key="index" class="cardS" :class="index<5?'cardBg1':'cardBg2'">
-					555.cn
+				<view v-for="(item,index) in datalist" :key="index" class="cardS" :class="item.hot == '1'?'cardBg1':'cardBg2'">
+					{{item.domain}}
 				</view>
 			</view>
 		</view>
 		<!--  -->
-		<view class="f_cc_ls rmdbg2">
+		<!-- <view class="f_cc_ls rmdbg2">
 			<title-home style="margin: 50px 0 30px 0;" @change="change" :title="title" :subhead="subhead"></title-home>
 			<view class="core_f rmdCardBox">
 				<view class="rmdCard" v-for="(item,index) in 8" :key="index">
@@ -22,7 +22,7 @@
 					<view class="btn">剩余时间 <text>5小时16分</text> </view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -35,21 +35,36 @@
 		data() {
 			return {
 				title:'预定推荐',
-				subhead:'一个小标题的注释一个小标题的注释一个小标题的注释'
+				subhead:'一个小标题的注释一个小标题的注释一个小标题的注释',
+				datalist:[],
+				total:''
 			}
 		},
 		onLoad(admin) {
-			console.log(admin);
 		},
 		onShow() {
 			
 		},
-		onHide() {
-			
+		mounted() {
+			this.getList()
 		},
 		methods: {
 			change(e){
 				console.log(e);
+			},
+			getList() {
+				let that = this;
+				that.$http('ym.ydhot', {pagesize:15}, '').then(res => {
+					if (res.code === 1) {
+						that.total = res.data.total
+						that.datalist = res.data.data.data
+					}
+				});
+			},
+			goYmList(){
+				uni.navigateTo({
+				    url: `/pages/nav1/n1_expire/index`
+				});
 			}
 		}
 	}

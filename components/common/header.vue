@@ -1,14 +1,14 @@
 <template>
 	<view>
 		<!-- 登录提示 -->
-		<view class="f_cc topbar" v-if="isLogin">
+		<view class="f_cc topbar" v-if="!isLogin">
 			<view class="core_f">
 				<view class="topbar_welcome">您好，欢迎来到...！</view>
-				<a class="topbar_login">
-					<navigator class="nav-item" :url="`/pages/user/login/index?callbackUrl=${callbackUrl}`">登录</navigator>
+				<a class="topbar_login" @click="goLogin('/pages/user/login/index')">
+					登录
 				</a>
-				<a class="topbar_login">
-					<navigator class="nav-item" :url="`/pages/user/register/index?callbackUrl=${callbackUrl}`">注册</navigator>
+				<a class="topbar_login" @click="goLogin('/pages/user/register/index')">
+					注册
 				</a>
 			</view>
 		</view>
@@ -111,7 +111,8 @@
 					{name:'污染查询',type:3},
 					{name:'拦截检测',type:4},
 				],
-				dialogVisible: false
+				dialogVisible: false,
+				callbackUrl : '',
 			}
 		},
 		watch: {
@@ -125,9 +126,10 @@
 			})
 		},
 		mounted() {
-			
+			this.$util.formPath()
 		},
 		methods: {
+			...mapActions(['logout']),
 			tabs(index){
 				// this.searchIndex = index   
 				if(index == 0){
@@ -141,22 +143,14 @@
 					});
 				}
 			},
-			goLogin(){
-				let callbackUrl = '/pages/index'
+			goLogin(url){
 				uni.navigateTo({
-				    url: `/pages/user/login/index?callbackUrl=${callbackUrl}`
+				    url: url
 				});
 			},
-			// handleClose(done) {
-			// 	console.log(done);
-			// 	// this.$confirm('确认关闭？')
-			// 	// 	.then(_ => {
-			// 	// 		done();
-			// 	// 	})
-			// 	// 	.catch(_ => {});
-			// }
 			quit(){
 				this.dialogVisible = false
+				this.logout()
 			}
 		}
 	}

@@ -13,6 +13,8 @@ import store from "@/shopro/store";
 
 // 初始化全局JS弹窗
 import './components/common/alert';
+import callBackUrl from '@/common/mixins/index'
+Vue.mixin(callBackUrl);
 
 Vue.use(ElementUI);
 Vue.use(shopro);

@@ -44,14 +44,14 @@
 			})
 		},
 		onLoad() {
-			
+				// this.getUserInfo()
 		},
 		onShow() {
-			this.getUserInfo()
+			// this.getUserInfo()
 			// this.getOrderList()
 			console.log('token',this.token);
 			
-			console.log('num',Number(12345.1235).toLocaleString());
+			console.log('num',this.$util.formatsym(86490));
 		},
 		onHide() {
 			

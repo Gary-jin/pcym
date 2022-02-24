@@ -12,10 +12,10 @@
 				<form class="card-body" @submit="register">
 					<view class="form-item">
 						<view class="country-code">+86</view>
-						<input class="input" placeholder="手机号码" name="phone" maxlength="11" type="number" v-model="phone" />
+						<input class="input" placeholder="手机号码" name="mobile" maxlength="11" type="number" v-model="mobile" />
 					</view>
 					<view class="form-item">
-						<input class="input" placeholder="短信验证码" name="captcha" maxlength="6" type="number" />
+						<input class="input" placeholder="短信验证码" name="code" maxlength="6" type="number" />
 						<view class="btn-send" :class="{'disabled': sendCode.disabled}" @click="sendSMSCode">{{sendCode.text}}</view>
 					</view>
 					<view class="form-item">
@@ -49,10 +49,11 @@
 </template>
 
 <script>
+	import { mapMutations, mapActions, mapState } from 'vuex';
 	export default {
 		data() {
 			return {
-				phone: '',
+				mobile: '',
 				sendCode: {
 					text: '获取验证码',
 					disabled: false
@@ -61,9 +62,10 @@
 			}
 		},
 		methods: {
+			...mapActions(['getUserInfo','setTokenAndBack']),
 			sendSMSCode() {
 				if (this.sendCode.disabled) return;
-				if (!this.$regular.phoneNumber.test(this.phone)) {
+				if (!this.$regular.phoneNumber.test(this.mobile)) {
 					return this.$util.showErrorMsg('请输入正确的手机号');
 				}
 			
@@ -71,15 +73,18 @@
 				this.sendCode.text = '发送中...';
 			
 				new Promise((resolve, reject) => {
-					this.$util.request('/register/sendSMSCaptcha', {
-						phone: this.phone
-					}, (res) => {
-						if (res.state == 'ok') {
+					this.$http('user.send', {
+						mobile: this.mobile,
+						event: 'register'
+					}, '').then(res => {
+						if (res.code === 1) {
 							resolve();
-						} else {
+							this.$util.showErrorMsg(res.msg);
+						} else{
 							reject(res.msg);
 						}
 					});
+					
 				}).then(() => {
 					let seconds = 60;
 					const timer = setInterval(() => {
@@ -111,26 +116,24 @@
 					title: '处理中...',
 					mask: true
 				});
-				this.$util.request('/register', data, (res) => {
-					uni.hideLoading();
 				
-					if (res.state == 'ok') {
-						this.$store.commit('login', res.loginUser);
-						this.$cart.syncCart();
-						
-						uni.redirectTo({
-							url: this.callbackUrl || '/pages/index'
-						});
-					} else {
-						this.$util.showErrorMsg(res.msg);
+				this.$http('user.register', data, '').then(res => {
+					uni.hideLoading();
+					if (res.code === 1) {
+						this.getUserInfo(res.data.userinfo.token);
+						this.setTokenAndBack()
+					} else{
+							this.$util.showErrorMsg(res.msg);
 					}
 				});
+				
+				
 			},
 			checkForm(e) {
-				if (!this.$regular.phoneNumber.test(e.phone)) {
+				if (!this.$regular.phoneNumber.test(e.mobile)) {
 					return this.$util.showErrorMsg('手机号格式错误');
 				}
-				if (!this.$regular.captcha.test(e.captcha)) {
+				if (!this.$regular.captcha.test(e.code)) {
 					return this.$util.showErrorMsg('验证码格式错误');
 				}
 				if (!this.$regular.password.test(e.password)) {
