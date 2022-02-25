@@ -32,7 +32,7 @@
 					<el-form-item label="后缀" prop="suffix">
 						<view class="d_f_c">
 							<el-checkbox style="height: 45px;margin-right: 10px;" @change="togType1(checkedSuffix)" v-model="checkedSuffix">不限</el-checkbox>
-							<el-checkbox-group v-model="ruleForm.suffix">
+							<el-checkbox-group @change="checkedSuffix = false" v-model="ruleForm.suffix">
 								<el-checkbox :label="index" name="type" v-for="(item,index) in filtraList.suffix" :key="index">{{item}}</el-checkbox>
 							</el-checkbox-group>
 						</view>
@@ -55,7 +55,7 @@
 					<el-form-item label="预订类型" prop="type">
 						<view class="d_f_c">
 							<el-checkbox style="height: 45px;margin-right: 10px;" @change="togType2(checkedType)" v-model="checkedType">不限</el-checkbox>
-							<el-checkbox-group v-model="ruleForm.type">
+							<el-checkbox-group @change="checkedType = false" v-model="ruleForm.type">
 								<el-checkbox :label="index" name="type" v-for="(item,index) in filtraList.type" :key="index">{{item}}</el-checkbox>
 							</el-checkbox-group>							
 						</view>
@@ -116,8 +116,8 @@
 					type:[], //预订类型
 					expire_time:'', //删除日期
 				},
-				checkedType:false,
-				checkedSuffix:false,
+				checkedType:true,
+				checkedSuffix:true,
 				filtraList:[],
 			}
 		},

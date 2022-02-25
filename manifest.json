@@ -93,10 +93,11 @@
                 "enable" : true
             }
         },
-        "title" : "pc商城",
+        "title" : "",
         "template" : "index.html",
         "router" : {
-            "mode" : "history"
+            "mode" : "history",
+            "base" : "./"
         },
         "devServer" : {
             "https" : false,
