@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<qj-header :searchIndex='0'></qj-header>
+		<qj-header></qj-header>
 		<qj-nav :navVal="'nav2'"></qj-nav>
 		<bread-crumb :pages="[{name: '网站交易'},{name: '热门网站'}]" separator=">"></bread-crumb>
 		<exp-exp></exp-exp>

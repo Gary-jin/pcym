@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<qj-header :searchIndex='0'></qj-header>
+		<qj-header></qj-header>
 		<qj-nav :navVal="'nav2'"></qj-nav>
 		<bread-crumb :pages="[{name: '网站交易'},{name: '热门网站',linkUrl:'/pages/nav2/n1_hotWz/index'},{name: '网站详情'}]" separator=">"></bread-crumb>
 		<view class="f_cc_ls">

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<qj-header :searchIndex='0'></qj-header>
+		<qj-header></qj-header>
 		<qj-nav :navVal="''" :adminVal="'admin'"></qj-nav>
 		<bread-crumb :pages="[{name: '管理中心'}]" separator=">"></bread-crumb>
 		<view class="f_cc_ls">

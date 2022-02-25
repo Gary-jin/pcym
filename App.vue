@@ -2,8 +2,6 @@
 	export default {
 		onLaunch() {
 			// 初始化登录信息
-			this.initLoginUser();
-			console.log('789');
 		},
 		onPageNotFound() {
 			// 页面不存在时自动重定向到首页
@@ -12,13 +10,7 @@
 			});
 		},
 		methods: {
-			initLoginUser() {
-				let loginUser = sessionStorage.getItem('loginUser');
-				if (loginUser) {
-					loginUser = JSON.parse(loginUser);
-					if (loginUser.token) this.$store.commit('login', loginUser);
-				}
-			}
+			
 		}
 	}
 </script>

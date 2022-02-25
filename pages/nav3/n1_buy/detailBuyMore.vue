@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<qj-header :searchIndex='0'></qj-header>
+		<qj-header></qj-header>
 		<qj-nav :navVal="'nav3'"></qj-nav>
 		<bread-crumb :pages="[{name: '一口价',linkUrl: '/pages/nav3/n1_buy/index'},{name: '批量购买'}]" separator=">"></bread-crumb>
 		

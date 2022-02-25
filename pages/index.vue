@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<qj-header :searchIndex='0'></qj-header>
+		<qj-header></qj-header>
 		<qj-nav :navVal="'home'"></qj-nav>
 		<!-- 预定推荐 -->
 		<recommend></recommend>
@@ -8,7 +8,7 @@
 		<hot-bidding></hot-bidding>
 		<!-- 热门网站展示 -->
 		<hot-website></hot-website>
-		<!-- 热门域名展示 -->
+		<!-- 热门域名展示 一口价  -->
 		<hot-ym></hot-ym>
 		<!-- 热门商标展示 -->
 		<hot-logo></hot-logo>
@@ -44,32 +44,14 @@
 			})
 		},
 		onLoad() {
-				// this.getUserInfo()
 		},
 		onShow() {
-			// this.getUserInfo()
-			// this.getOrderList()
-			console.log('token',this.token);
-			
-			console.log('num',this.$util.formatsym(86490));
 		},
 		onHide() {
 			
 		},
 		methods: {
 			...mapActions(['getUserInfo']),
-			getOrderList() {
-				let that = this;
-				that.loadStatus = 'loading';
-				that.$http('order.index', {
-					type: 'all',
-					page: 1
-				}, '加载中...').then(res => {
-					if (res.code === 1) {
-						
-					}
-				});
-			},
 		}
 	}
 </script>

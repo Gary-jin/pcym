@@ -49,17 +49,9 @@ export default {
 			// desc: '退出登录',end
 		},
 
-	},
 
-	order: {
-		index: {
-			url: "order/index",
-			auth: true,
-			method: "GET",
-			// desc: '订单列表',
-		},
 	},
-	// 域名预定
+	// 域名
 	ym:{
 		ydhot: {
 			url: "expires/hot",
@@ -71,7 +63,25 @@ export default {
 			url: "domains_bidding/hot",
 			auth: false,
 			method: "GET",
-			// desc: ' 热门过期域名',
+			// desc: ' 热门竞价域名',
+		},
+		ykjhot: {
+			url: "domains/hot",
+			auth: false,
+			method: "GET",
+			// desc: ' 热门一口价域名',
+		},
+		filtrate: {
+			url: "index/getFilter",
+			auth: false,
+			method: "GET",
+			// desc: ' 筛选项',
+		},
+		domainsList: {
+			url: "expires/domainsList",
+			auth: false,
+			method: "GET",
+			// desc: '  过期域名列表',
 		},
 	}
 

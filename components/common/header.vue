@@ -51,27 +51,24 @@
 					<image src="../../static/image/common/logo.png" mode="widthFix"></image>
 				</view>
 				<view class="search">
-					<!--  -->
 					<view class="search_top">
 						<view class="lp" @click="tabs(index)" v-for="(item,index) in searchList" :key="index">
-							<view :class="index == searchIndex?'name':''" >{{item.name}}</view>	
-							<view class="icon" v-if="index == searchIndex">
+							<view :class="index == searchVal?'name':''" >{{item.name}}</view>	
+							<view class="icon" v-if="index == searchVal">
 								<image src="../../static/image/common/scion.png" mode="widthFix"></image>
 							</view>
 							<view class="icon_no" v-else></view>
 						</view>
 					</view>
-					<!--  -->
 					<view class="search_b f_bc">
 						<input class="inp_s" type="text" value="" placeholder-class="pl_c" placeholder="请输入域名关键字" />
 						<el-button
 							class="btn_s"
 							@click="cancel"
 						  type="primary">
-						  批量导出
+						  查询
 						</el-button>
 					</view>
-					
 				</view>
 			</view>
 		</view>
@@ -105,12 +102,13 @@
 		data() {
 			return {
 				searchList:[
-					{name:'域名搜索',type:0},
+					{name:'全站域名搜索',type:0},
 					{name:'whois查询',type:1},
-					{name:'被墙查询',type:2},
-					{name:'污染查询',type:3},
-					{name:'拦截检测',type:4},
+					// {name:'被墙查询',type:2},
+					// {name:'污染查询',type:3},
+					// {name:'拦截检测',type:4},
 				],
+				searchVal:0,
 				dialogVisible: false,
 				callbackUrl : '',
 			}
@@ -131,17 +129,17 @@
 		methods: {
 			...mapActions(['logout']),
 			tabs(index){
-				// this.searchIndex = index   
-				if(index == 0){
-					uni.navigateTo({
-					    url: `/pages/index`
-					});
-				}
-				if(index == 1){
-					uni.navigateTo({
-					    url: ``
-					});
-				}
+				this.searchVal = index   
+				// if(index == 0){
+				// 	uni.navigateTo({
+				// 	    url: `/pages/index`
+				// 	});
+				// }
+				// if(index == 1){
+				// 	uni.navigateTo({
+				// 	    url: ``
+				// 	});
+				// }
 			},
 			goLogin(url){
 				uni.navigateTo({

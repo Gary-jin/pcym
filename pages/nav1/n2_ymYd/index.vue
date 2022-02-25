@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<qj-header :searchIndex='0'></qj-header>
+		<qj-header></qj-header>
 		<qj-nav :navVal="'nav1'"></qj-nav>
 		<bread-crumb :pages="[{name: '过期域名'},{name: '域名预定'}]" separator=">"></bread-crumb>
 		<view class="f_cc_ls">

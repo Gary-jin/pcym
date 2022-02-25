@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<qj-header :searchIndex='0'></qj-header>
+		<qj-header></qj-header>
 		<qj-nav :navVal="'nav1'"></qj-nav>
 		<bread-crumb :pages="[{name: '域名抢注'},{name: '竞价域名',linkUrl:'/pages/nav1/n4_auction/index'},{name: '竞价详情'}]" separator=">"></bread-crumb>
 		<view class="f_cc_ls">

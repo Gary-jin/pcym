@@ -1,58 +1,21 @@
 <template>
 	<view class="f_cc_ls">
-		<view class="core expCore">
-			<!--  -->
-				<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="116px" class="demo-ruleForm">
-					<el-form-item label="快速搜索" prop="resource">
-					  <el-radio-group v-model="ruleForm.resource">
-					    <el-radio label="buxain"></el-radio>
-					    <el-radio label="ww"></el-radio>
-					  </el-radio-group>
-					</el-form-item>
-				  <el-form-item label="活动区域" prop="region">
-				    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-				      <el-option label="区域一" value="shanghai"></el-option>
-				      <el-option label="区域二" value="beijing"></el-option>
-				    </el-select>
-				  </el-form-item>
-				  <el-form-item label="即时配送" prop="delivery">
-				    <el-switch v-model="ruleForm.delivery"></el-switch>
-				  </el-form-item>
-				  <el-form-item label="活动性质" prop="type">
-				    <el-checkbox-group v-model="ruleForm.type">
-				      <el-checkbox label="1" name="type"></el-checkbox>
-				      <el-checkbox label="2" name="type"></el-checkbox>
-				      <el-checkbox label="3" name="type"></el-checkbox>
-				      <el-checkbox label="4" name="type"></el-checkbox>
-				    </el-checkbox-group>
-				  </el-form-item>
-				</el-form>
-				<view class="footerBtnBox">
-					<view class="footerTit">
-						注意：数据只做参考，不保证数据完全准确。
-					</view>
-					<view class="footerBtn">
-						<el-button type="primary" @click="submitForm('ruleForm')">查找</el-button>
-						<el-button @click="resetForm('ruleForm')">重置</el-button>						
-					</view>
-				</view>
-			<!--  -->
-		</view>
+		<filtra @submitForm="submitForm"></filtra>
 		<view style="height: 20px;"></view>
 		<view class="core expCore">
 			<template>
-			  <el-table ref="multipleTable" :data="tableData" style="width: 100%" max-height="250">
+			  <el-table ref="multipleTable" :data="list" style="width: 100%" >
 					<el-table-column type="selection" width="55"></el-table-column>
-			    <el-table-column prop="date" label="域名"></el-table-column>
-					<el-table-column prop="date" label="简介"></el-table-column>
-					<el-table-column prop="date" label="查询"></el-table-column>
-					<el-table-column prop="date" label="类型"></el-table-column>
-					<el-table-column prop="date" label="长度" sortable></el-table-column>
-					<el-table-column prop="date" label="外链" sortable></el-table-column>
-					<el-table-column prop="date" label="PR" sortable></el-table-column>
-					<el-table-column prop="date" label="权重" sortable></el-table-column>
-					<el-table-column prop="date" label="原注册日期" width="120" sortable></el-table-column>
-					<el-table-column prop="date" label="删除日期" sortable></el-table-column>
+			    <el-table-column prop="domain" label="域名"></el-table-column>
+					<el-table-column prop="desc" label="简介"></el-table-column>
+					<!-- <el-table-column prop="date" label="查询"></el-table-column> -->
+					<el-table-column prop="type" label="类型"></el-table-column>
+					<el-table-column prop="length" label="长度" sortable></el-table-column>
+					<el-table-column prop="out_link" label="外链" sortable></el-table-column>
+					<!-- <el-table-column prop="date" label="PR" sortable></el-table-column> -->
+					<el-table-column prop="weight" label="权重" sortable></el-table-column>
+					<el-table-column prop="reg_date" label="原注册日期" width="120" sortable></el-table-column>
+					<el-table-column prop="delete_date" label="删除日期" sortable></el-table-column>
 			    <el-table-column label="操作" width="60">
 			      <template slot-scope="scope">
 			        <el-button
@@ -95,10 +58,11 @@
 </template>
 
 <script>
-
+	import wzList from '@/common/config/common/wzList.js';
+	import filtra from'./filtra.vue'
 	export default {
 		components: {
-			
+			filtra
 		},
 		props: {
 			// navVal: {
@@ -109,31 +73,14 @@
 		data() {
 			return {
 				ruleForm: {
+					fast: '', //快速搜索
 					name: '',
 					region: '',
 					delivery: false,
 					type: [],
-					resource: ''
 				},
-				rules: {
-				},
+				rules: {},
 				tableData:[
-					{
-						date: '2016-05-03',
-						name: '王小',
-						province: '上海',
-						city: '普陀区',
-						address: '上海市普陀区金沙江路 1518 弄',
-						zip: 200333
-					},
-					{
-						date: '2016-05-02',
-						name: '王小虎',
-						province: '上海',
-						city: '普陀区',
-						address: '上海市普陀区金沙江路 1518 弄',
-						zip: 200333
-					},
 					{
 						date: '2016-05-02',
 						name: '王小虎',
@@ -143,27 +90,21 @@
 						zip: 200333
 					}
 				],
-				checked: false
+				checked: false,
+				
+				list:[],
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
+		mounted() {
 			
 		},
 		methods: {
-			submitForm(formName) {
-				this.$refs[formName].validate((valid) => {
-					if (valid) {
-						// alert('submit!');
-						console.log(valid);
-						console.log(this.ruleForm);
-					} else {
-						console.log('error submit!!');
-						return false;
+			submitForm(e) {
+				console.log('x',e);
+				let that = this;
+				that.$http('ym.domainsList', e).then(res => {
+					if (res.code === 1) {
+						that.list = res.data.data
 					}
 				});
 			},
@@ -211,7 +152,7 @@
 			font-weight: 400;
 			color: #FE2626;
 			text-align: center;
-			padding-bottom: 20px;
+			padding: 20px 0;
 		}
 		.footerBtn{
 			display: flex;
@@ -229,6 +170,38 @@
 			.btn{
 				margin-left: 20px;
 			}
+		}
+	}
+	
+	
+	// form
+	.rowBox:last-child{
+		border: none;
+	}
+	.rowBox{
+		display: flex;
+		align-items: center;
+		// height: 70px;
+		border-bottom: 1px #CED2DA dashed;
+		.formTit{
+			width: 100px;
+			height: 100%;
+			color: $text-color1;
+			font-weight: bold;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			margin-right: 20px;
+		}
+		.formCheck{
+			width: 1000px;
+			padding: 20px 0;
+			.cBox{
+				width: 125px;
+			}
+		}
+		.moreBox{
+			width: 80px;
 		}
 	}
 </style>

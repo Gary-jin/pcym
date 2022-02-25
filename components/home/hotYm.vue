@@ -4,10 +4,10 @@
 		<view class="f_cc_ls rmdbg2">
 			<title-home style="margin: 50px 0 30px 0;" @change="change" :title="title" :subhead="subhead"></title-home>
 			<view class="core_f rmdCardBox">
-				<view class="rmdCard" v-for="(item,index) in 8" :key="index">
-					<view class="top">nahan.com.cn</view>
-					<view class="cen">￥26854.00</view>
-					<view class="btn">剩余时间 <text>5小时16分</text> </view>
+				<view class="rmdCard" v-for="(item,index) in datalist" :key="index">
+					<view class="top">{{item.domain}}</view>
+					<view class="cen">￥{{item.price}}</view>
+					<view class="btn">剩余时间 <text>{{item.time}}</text> </view>
 				</view>
 			</view>
 		</view>
@@ -22,20 +22,26 @@
 		},
 		data() {
 			return {
-				title:'热门域名展示',
-				subhead:'一个小标题的注释一个小标题的注释一个小标题的注释'
+				title:'热门一口价展示',
+				subhead:'一个小标题的注释一个小标题的注释一个小标题的注释',
+				datalist:[]
 			}
 		},
 		onLoad(admin) {
 			console.log(admin);
 		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getList()
 		},
 		methods: {
+			getList() {
+				let that = this;
+				that.$http('ym.ykjhot', {pagesize:8}, '').then(res => {
+					if (res.code === 1) {
+						that.datalist = res.data.data
+					}
+				});
+			},
 			change(e){
 				console.log(e);
 			}
