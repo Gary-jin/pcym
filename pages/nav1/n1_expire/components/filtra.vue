@@ -37,21 +37,24 @@
 							</el-checkbox-group>
 						</view>
 					</el-form-item>
-					<el-form-item label="长度" prop="">
-						<view class="itemCore">
-							<el-input v-model="ruleForm.min_length" type="number" min="0" size="small" placeholder=""></el-input>
-							<i class="el-icon-minus"></i>
-							<el-input v-model="ruleForm.max_length" type="number" min="0" size="small" placeholder=""></el-input>
-						</view>
-					</el-form-item>
-					<el-form-item label="注册日期" prop="">
-						<el-select v-model="ruleForm.reg_time" placeholder="不限" size="small">
-							<el-option :label="''" :value="''">不限</el-option>
-							<el-option
-								v-for="(item,index) in filtraList.reg_time" :key="index"
-								:label="item+'年之前'" :value="item"></el-option>
-						</el-select>
-					</el-form-item>
+					<view class="f_bc itemBox">
+						<el-form-item label="长度" prop="">
+							<view class="itemCore">
+								<el-input v-model="ruleForm.min_length" type="number" min="0" size="small" placeholder=""></el-input>
+								<i class="el-icon-minus"></i>
+								<el-input v-model="ruleForm.max_length" type="number" min="0" size="small" placeholder=""></el-input>
+							</view>
+						</el-form-item>
+						<el-form-item label="注册日期" prop="">
+							<el-select v-model="ruleForm.reg_time" placeholder="不限" size="small">
+								<el-option :label="''" :value="''">不限</el-option>
+								<el-option
+									v-for="(item,index) in filtraList.reg_time" :key="index"
+									:label="item+'年之前'" :value="item"></el-option>
+							</el-select>
+						</el-form-item>						
+					</view>
+					
 					<el-form-item label="预订类型" prop="type">
 						<view class="d_f_c">
 							<el-checkbox style="height: 45px;margin-right: 10px;" @change="togType2(checkedType)" v-model="checkedType">不限</el-checkbox>
