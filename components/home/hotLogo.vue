@@ -60,7 +60,8 @@
 		background-color: $bg-home-2;
 		height: 1117px;
 		background-image: url(../../static/image/home/bb2.png);
-		background-size: 100% 100%;
+		// background-size: 100% 100%;
+		background-position: 50% 0;
 		background-repeat: no-repeat;
 		.rmdCardBox1{
 			justify-content: flex-start;

@@ -53,23 +53,11 @@ export default {
 	},
 	// 域名
 	ym:{
-		ydhot: {
-			url: "expires/hot",
-			auth: false,
-			method: "GET",
-			// desc: ' 热门过期域名',
-		},
 		bidhot: {
 			url: "domains_bidding/hot",
 			auth: false,
 			method: "GET",
 			// desc: ' 热门竞价域名',
-		},
-		ykjhot: {
-			url: "domains/hot",
-			auth: false,
-			method: "GET",
-			// desc: ' 热门一口价域名',
 		},
 		filtrate: {
 			url: "index/getFilter",
@@ -77,11 +65,31 @@ export default {
 			method: "GET",
 			// desc: ' 筛选项',
 		},
+
+		ydhot: {
+			url: "expires/hot",
+			auth: false,
+			method: "GET",
+			// desc: ' 热门过期域名',
+		},
 		domainsList: {
 			url: "expires/domainsList",
 			auth: false,
 			method: "GET",
 			// desc: '  过期域名列表',
+		},
+
+		ykjhot: {
+			url: "domains/hot",
+			auth: false,
+			method: "GET",
+			// desc: ' 热门一口价域名',
+		},
+		ykjList: {
+			url: "domains/domainsList",
+			auth: false,
+			method: "GET",
+			// desc: '  一口价域名列表',
 		},
 	}
 

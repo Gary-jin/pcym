@@ -2,7 +2,7 @@
 	<view>
 		<view class="core expCore">
 			
-				<el-form :model="ruleForm"  ref="ruleForm" label-width="116px" class="demo-ruleForm">
+				<el-form :model="ruleForm"  ref="ruleForm" label-width="120px" class="demo-ruleForm">
 					<el-form-item label="快速搜索" prop="rule">
 						<el-radio-group v-model="ruleForm.rule">
 							<el-radio :label="''" @change="ruleForm.rule=''">不限</el-radio>
@@ -37,22 +37,39 @@
 							</el-checkbox-group>
 						</view>
 					</el-form-item>
-					<el-form-item label="长度" prop="">
-						<view class="itemCore">
-							<el-input v-model="ruleForm.min_length" type="number" min="0" size="small" placeholder=""></el-input>
-							<i class="el-icon-minus"></i>
-							<el-input v-model="ruleForm.max_length" type="number" min="0" size="small" placeholder=""></el-input>
-						</view>
-					</el-form-item>
-					<el-form-item label="注册日期" prop="">
-						<el-select v-model="ruleForm.reg_time" placeholder="不限" size="small">
-							<el-option :label="''" :value="''">不限</el-option>
-							<el-option
-								v-for="(item,index) in filtraList.reg_time" :key="index"
-								:label="item+'年之前'" :value="item"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="预订类型" prop="type">
+					<view class="f_bc itemBox">
+						<el-form-item label="长度" prop="">
+							<view class="itemCore">
+								<el-input v-model="ruleForm.min_length" type="number" min="0" size="small" placeholder=""></el-input>
+								<i class="el-icon-minus"></i>
+								<el-input v-model="ruleForm.max_length" type="number" min="0" size="small" placeholder=""></el-input>
+							</view>
+						</el-form-item>
+						<el-form-item label="价格" prop="">
+							<view class="itemCore">
+								<el-input v-model="ruleForm.min_price" type="number" min="0" size="small" placeholder=""></el-input>
+								<i class="el-icon-minus"></i>
+								<el-input v-model="ruleForm.max_price" type="number" min="0" size="small" placeholder=""></el-input>
+							</view>
+						</el-form-item>
+					</view>
+					<view class="f_bc itemBox">
+						<el-form-item label="域名到期日期" prop="">
+							<el-select v-model="ruleForm.end_time" placeholder="全部" size="small">
+								<el-option label="全部" :value="0"></el-option>
+								<el-option label="大于30天" :value="30"></el-option>
+								<el-option label="大于90天" :value="90"></el-option>
+								<el-option label="大于180天" :value="180"></el-option>
+								<el-option label="大于1年" :value="365"></el-option>
+								<el-option label="大于2年" :value="365*2"></el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="简介" prop="">
+							<el-input v-model="ruleForm.desc" class="mr"  size="small" placeholder=""></el-input>
+						</el-form-item>						
+					</view>
+					
+					<!-- <el-form-item label="预订类型" prop="type">
 						<view class="d_f_c">
 							<el-checkbox style="height: 45px;margin-right: 10px;" @change="togType2(checkedType)" v-model="checkedType">不限</el-checkbox>
 							<el-checkbox-group @change="checkedType = false" v-model="ruleForm.type">
@@ -65,9 +82,7 @@
 							<el-radio :label="''" @change="ruleForm.expire_time=''">不限</el-radio>
 							<el-radio :label="index" v-for="(item,index) in filtraList.expire_time" :key="index">{{item}}</el-radio>
 						</el-radio-group>
-					</el-form-item>
-					
-					
+					</el-form-item> -->
 					
 				</el-form>
 				
@@ -106,15 +121,19 @@
 				ruleForm: {
 					rule: '', //快速查询/构成
 					suffix:[], //后缀
-					key:[], //关键字
+					key: [], //关键字
 					key_match:[], //关键字开头 //关键字结尾
 					besides:'', //排除
 					besides_match:[], //排除开头 //排除结尾
 					min_length:'', //长度区间最低
 					max_length:'' ,//长度区间最高
-					reg_time:'', //注册日期
-					type:[], //预订类型
-					expire_time:'', //删除日期
+					min_price:'', //价格区间最低
+					max_price:'' ,//价格区间最高
+					desc:'', //简介
+					end_time:'',//域名到期日期
+					// reg_time:'', //注册日期
+					// type:[], //预订类型
+					// expire_time:'', //删除日期
 				},
 				textVal:'',
 				checkedType:true,
@@ -138,20 +157,21 @@
 				});
 			},
 			submitForm(){
+				console.log(this.ruleForm);
 				this.$emit('submitForm',this.ruleForm)
 			},
 			resetForm(){
 				this.ruleForm.rule= '';//快速查询/构成
 				this.ruleForm.suffix=[];//后缀
-				this.ruleForm.key= [];//关键字
+				this.ruleForm.key='';//关键字
 				this.ruleForm.key_match=[];//关键字开头 //关键字结尾
 				this.ruleForm.besides='';//排除
 				this.ruleForm.besides_match=[];//排除开头 //排除结尾
 				this.ruleForm.min_length='';//长度区间最低
 				this.ruleForm.max_length='' ;//长度区间最高
-				this.ruleForm.reg_time='';//注册日期
-				this.ruleForm.type=[];//预订类型
-				this.ruleForm.expire_time='';
+				// this.ruleForm.reg_time='';//注册日期
+				// this.ruleForm.type=[];//预订类型
+				// this.ruleForm.expire_time=''
 				this.textVal = ''
 			},
 			togType1(val){

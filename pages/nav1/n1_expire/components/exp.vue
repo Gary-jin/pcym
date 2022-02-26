@@ -19,7 +19,7 @@
 			    <el-table-column label="操作" width="60">
 			      <template slot-scope="scope">
 			        <el-button
-			          @click.native.prevent="deleteRow(scope.$index, tableData[scope.$index])"
+			          @click.native.prevent="deleteRow(scope.$index, list[scope.$index])"
 			          type="text"
 			          size="small">
 			          预订
@@ -45,11 +45,11 @@
 					<el-pagination
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page="4"
-						:page-sizes="[100, 200, 300, 400]"
-						:page-size="100"
+						:current-page="pagin.page"
+						:page-sizes="[50, 100]"
+						:page-size="pagin.pagesize"
 						layout="total, sizes, prev, pager, next, jumper"
-						:total="400">
+						:total="totalNum">
 					</el-pagination>
 				</view>
 			</view>			
@@ -58,8 +58,8 @@
 </template>
 
 <script>
-	import wzList from '@/common/config/common/wzList.js';
 	import filtra from'./filtra.vue'
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			filtra
@@ -72,48 +72,45 @@
 		},
 		data() {
 			return {
-				ruleForm: {
-					fast: '', //快速搜索
-					name: '',
-					region: '',
-					delivery: false,
-					type: [],
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
 				},
-				rules: {},
-				tableData:[
-					{
-						date: '2016-05-02',
-						name: '王小虎',
-						province: '上海',
-						city: '普陀区',
-						address: '上海市普陀区金沙江路 1518 弄',
-						zip: 200333
-					}
-				],
+				ruleForm: {},
 				checked: false,
 				
 				list:[],
 			}
 		},
+		computed: {
+			...mapState({
+				isLogin: ({ user })  => user.isLogin,
+			})
+		},
 		mounted() {
-			
+			this.getList()
 		},
 		methods: {
 			submitForm(e) {
-				console.log('x',e);
+				this.ruleForm = e
+				this.getList()
+			},
+			getList(){
 				let that = this;
-				that.$http('ym.domainsList', e).then(res => {
+				that.$http('ym.domainsList', {
+					...that.pagin,
+					...that.ruleForm
+				}).then(res => {
 					if (res.code === 1) {
 						that.list = res.data.data
+						that.totalNum = res.data.total
 					}
 				});
 			},
-			resetForm(formName) {
-				this.$refs[formName].resetFields();
-			},
 			toggleSelection(val) {
 				if (val) {
-					this.tableData.forEach(row => {
+					this.list.forEach(row => {
 						this.$refs.multipleTable.toggleRowSelection(row);
 					});
 				} else {
@@ -122,9 +119,13 @@
 			},
 			//单个预定
 			deleteRow(index,item){
-				uni.navigateTo({
-					url: `/pages/nav1/n2_ymYd/index?tab=first`
-				});
+				if(this.isLogin){
+					uni.navigateTo({
+						url: `/pages/nav1/n2_ymYd/index?tab=first`
+					});					
+				} else{
+					this.$util.loginPopup()
+				}
 			},
 			derive(){
 				uni.navigateTo({
@@ -133,10 +134,12 @@
 			},
 			// 
 			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
+				this.pagin.pagesize = val
+				this.getList()
 			},
 			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
+				this.pagin.page = val
+				this.getList()
 			}
 		}
 	}

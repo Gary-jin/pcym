@@ -1,97 +1,30 @@
 <template>
 	<view class="f_cc_ls">
-		<view class="core expCore">
-			<!--  -->
-				<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="116px" class="demo-ruleForm">
-					<el-form-item label="快速搜索" prop="resource">
-					  <el-radio-group v-model="ruleForm.resource">
-					    <el-radio label="buxain"></el-radio>
-					    <el-radio label="ww"></el-radio>
-					  </el-radio-group>
-					</el-form-item>
-				  <el-form-item label="活动区域" prop="region">
-				    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-				      <el-option label="区域一" value="shanghai"></el-option>
-				      <el-option label="区域二" value="beijing"></el-option>
-				    </el-select>
-				  </el-form-item>
-				  <el-form-item label="即时配送" prop="delivery">
-				    <el-switch v-model="ruleForm.delivery"></el-switch>
-				  </el-form-item>
-				  <el-form-item label="活动性质" prop="type">
-				    <el-checkbox-group v-model="ruleForm.type">
-				      <el-checkbox label="1" name="type"></el-checkbox>
-				      <el-checkbox label="2" name="type"></el-checkbox>
-				      <el-checkbox label="3" name="type"></el-checkbox>
-				      <el-checkbox label="4" name="type"></el-checkbox>
-				    </el-checkbox-group>
-				  </el-form-item>
-				</el-form>
-				<view class="footerBtnBox">
-					<view class="footerTit">
-						注意：数据只做参考，不保证数据完全准确。
-					</view>
-					<view class="footerBtn">
-						<el-button type="primary" @click="submitForm('ruleForm')">查找</el-button>
-						<el-button @click="resetForm('ruleForm')">重置</el-button>						
-					</view>
-				</view>
-			<!--  -->
-		</view>
+		<filtra @submitForm="submitForm"></filtra>
 		<view style="height: 20px;"></view>
 		<view class="core expCore">
 			<template>
-			  <el-table
-					ref="multipleTable"
-			    :data="tableData"
-			    style="width: 100%"
-			    max-height="250">
-					<el-table-column
-						type="selection"
-						width="55">
-					</el-table-column>
+			  <el-table ref="multipleTable" :data="list" style="width: 100%" >
+					<el-table-column type="selection" width="55"></el-table-column>
+			    <el-table-column prop="domain" label="域名"></el-table-column>
+					<el-table-column prop="desc" label="简介"></el-table-column>
+					<el-table-column prop="length" label="长度" sortable></el-table-column>
 					
-					 <el-table-column
-							label="域名">
-							<template slot-scope="scope">
-								<el-button
-									@click.native.prevent="goDetail(scope.$index, tableData[scope.$index])"
-									type="text"
-									size="small">
-									{{ scope.row.name }}
-								</el-button>
-							</template>
-						</el-table-column>
+					<!-- <el-table-column prop="date" label="访问量"></el-table-column> -->
+					<el-table-column prop="delete_date" label="域名到期时间" sortable></el-table-column>
+					<el-table-column prop="price" label="价格" sortable></el-table-column>
+					<el-table-column prop="last_time" label="	剩余时间" width="120" ></el-table-column>
 					
-			    <el-table-column
-			      prop="name"
-			      label="姓名">
-			    </el-table-column>
-			    <el-table-column
-			      prop="province"
-			      label="省份">
-			    </el-table-column>
-			    <el-table-column
-			      prop="city"
-			      label="市区">
-			    </el-table-column>
-			    <el-table-column
-			      prop="address"
-			      label="地址"
-			      width="300">
-			    </el-table-column>
-			    <el-table-column
-			      prop="zip"
-			      label="邮编">
-			    </el-table-column>
-			    <el-table-column
-			      label="操作">
+					<!-- <el-table-column prop="out_link" label="外链" sortable></el-table-column> -->
+					<!-- <el-table-column prop="date" label="PR" sortable></el-table-column> -->
+					<!-- <el-table-column prop="weight" label="权重" sortable></el-table-column> -->
+			    <el-table-column label="操作" width="60">
 			      <template slot-scope="scope">
 			        <el-button
-			          @click.native.prevent="goDetail(scope.$index, tableData[scope.$index])"
+			          @click.native.prevent="deleteRow(scope.$index, list[scope.$index])"
 			          type="text"
 			          size="small">
-			          一口价
+			          购买
 			        </el-button>
 			      </template>
 			    </el-table-column>
@@ -104,21 +37,21 @@
 				<view class="pagL">
 					 <el-checkbox @change="toggleSelection(checked)" v-model="checked">全选</el-checkbox>
 					 <el-button
-					   @click="derive(checked)"
+					   @click="derive"
 						 class="btn"
 					   type="primary">
-					   批量购买
+					   批量导出
 					 </el-button>
 				</view>
 				<view class="pagR">
 					<el-pagination
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page="4"
-						:page-sizes="[100, 200, 300, 400]"
-						:page-size="100"
+						:current-page="pagin.page"
+						:page-sizes="[50, 100]"
+						:page-size="pagin.pagesize"
 						layout="total, sizes, prev, pager, next, jumper"
-						:total="400">
+						:total="totalNum">
 					</el-pagination>
 				</view>
 			</view>			
@@ -127,10 +60,11 @@
 </template>
 
 <script>
-
+	import filtra from'./filtra.vue'
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
-			
+			filtra
 		},
 		props: {
 			// navVal: {
@@ -140,67 +74,41 @@
 		},
 		data() {
 			return {
-				ruleForm: {
-					name: '',
-					region: '',
-					delivery: false,
-					type: [],
-					resource: ''
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
 				},
-				rules: {
-				},
-				tableData:[
-					{
-						date: '2016-05-03',
-						name: '.com1',
-						province: '上海',
-						city: '普陀区',
-						address: '上海市普陀区金沙江路 1518 弄',
-						zip: 200333
-					},
-					{
-						date: '2016-05-02',
-						name: '.com2',
-						province: '上海',
-						city: '普陀区',
-						address: '上海市普陀区金沙江路 1518 弄',
-						zip: 200333
-					},
-					{
-						date: '2016-05-02',
-						name: '.com3',
-						province: '上海',
-						city: '普陀区',
-						address: '上海市普陀区金沙江路 1518 弄',
-						zip: 200333
-					}
-				],
-				checked: false
+				ruleForm: {},
+				checked: false,
+				
+				list:[],
 			}
 		},
-		onLoad() {
+		computed: {
+			...mapState({
+				isLogin: ({ user })  => user.isLogin,
+			})
 		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getList()
 		},
 		methods: {
-			submitForm(formName) {
-				this.$refs[formName].validate((valid) => {
-					if (valid) {
-						// alert('submit!');
-						console.log(valid);
-						console.log(this.ruleForm);
-					} else {
-						console.log('error submit!!');
-						return false;
+			submitForm(e) {
+				this.ruleForm = e
+				this.getList()
+			},
+			getList(){
+				let that = this;
+				that.$http('ym.ykjList', {
+					...that.pagin,
+					...that.ruleForm
+				}).then(res => {
+					if (res.code === 1) {
+						that.list = res.data.data
+						that.totalNum = res.data.total
 					}
 				});
-			},
-			resetForm(formName) {
-				this.$refs[formName].resetFields();
 			},
 			toggleSelection(val) {
 				if (val) {
@@ -218,23 +126,25 @@
 				uni.navigateTo({
 				    url: `/pages/nav3/n1_buy/detailBuyMore`
 				});
-				// if(val){
-					
-				// }
 			},
 			// 单个购买
-			goDetail(index, rows){
-				console.log(index,rows);
-				uni.navigateTo({
-				    url: `/pages/nav3/n1_buy/detailBuySingle`
-				});
+			deleteRow(index, rows){
+				if(this.isLogin){				
+					uni.navigateTo({
+						url: `/pages/nav3/n1_buy/detailBuySingle`
+					});
+				} else{
+					this.$util.loginPopup()
+				}
 			},
 			// 
 			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
+				this.pagin.pagesize = val
+				this.getList()
 			},
 			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
+				this.pagin.pagesize = val
+				this.getList()
 			}
 		}
 	}

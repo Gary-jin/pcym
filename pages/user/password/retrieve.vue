@@ -148,7 +148,7 @@
 <style lang="scss">
 	.bgBox{
 		background-image: url(../../../static/image/common/loginBg.png);
-		background-size: 1920px 1080px;
+		background-size: 100% 100%;
 		width: 100%;
 		height: 100vh;
 		overflow: hidden;

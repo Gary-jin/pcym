@@ -87,7 +87,20 @@ const actions = {
 	showAuthModal({
 		commit
 	}, type = 'accountLogin') {
-		
+		console.log('isLogin',state.isLogin)
+		if(!state.isLogin){
+			uni.showModal({
+				title: '提示',
+				content: '您还未登录请登录',
+				success: function (res) {
+						if (res.confirm) {
+							uni.navigateTo({
+								url: `/pages/user/login/index`
+							});
+						} 
+				}
+			});
+		}
 		
 	},
 

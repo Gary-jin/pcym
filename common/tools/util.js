@@ -1,5 +1,5 @@
 
-
+import store from '@/shopro/store/index.js'
 export default {
 
 	/**
@@ -83,18 +83,40 @@ export default {
 		return str.length;
 	},
 	/**
+	 * 转换多行输入
+	 */
+	 textareaList(val){
+		let list = val.split(/\r?\n|\r/);
+		let str = []
+		list.forEach((item,index)=>{
+			if(item){
+				str.push(item)
+			}
+		})
+		return str;
+	},
+	/**
 	 * 
 	 */
 	formPath(val){
 		let route = '/'+(getCurrentPages()[getCurrentPages().length - 1]).route
 		let url = window.location.href;
 		let options = ''
+		let w = ''
 		if (url.indexOf("?") != -1) {
 			options = url.split("?")[1]
+			w = '?'
 		}
-		let path = route +'?'+ options
+
+		let path = route +w+ options 
 		uni.setStorageSync('fromLogin',path);
 		return ;
+	},
+	/** 
+	 * 登录提示
+	*/
+	loginPopup(){
+		store.dispatch('showAuthModal');
 	},
 	/**
 		 * 剩余时间格式化

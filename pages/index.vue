@@ -16,7 +16,6 @@
 		<hot-mt></hot-mt>
 		
 		<qj-footer></qj-footer>
-		<!-- <bread-crumb :pages="[{name: '交易订单', linkUrl: '/pages/order/index'}, {name: '订单详情'}]" separator="/"></bread-crumb> -->
 	</view>
 </template>
 
