@@ -1,24 +1,24 @@
 <template>
 	<view class="rightBox">
 		<view class="detail">
-			<view class="ymBox">pengdeng.com.cn</view>
-			<view class="ymBox1">我的名字</view>
+			<view class="ymBox">{{goodsDetail.domain}}</view>
+			<view class="ymBox1">{{goodsDetail.desc}}</view>
 			<view class="ymCen ">
 				<view class="card">
 					<view class="t1">当前价格：</view>
-					<view class="t2 t22">DEL</view>
+					<view class="t2 t22">{{goodsDetail.price}}</view>
 				</view>
 				<view class="card">
-					<view class="t1">剩余时间：</view>
-					<view class="t2">12</view>
+					<view class="t1">过期时间：</view>
+					<view class="t2">{{goodsDetail.delete_date}}</view>
 				</view>
-				<view class="card">
+				<!-- <view class="card">
 					<view class="t1">注册商：</view>
-					<view class="t2">2021-08-21 至 2022-08-21</view>
-				</view>
+					<view class="t2">{{goodsDetail.desc}}</view>
+				</view> -->
 				<view class="card">
 					<view class="t1">域名有效期：</view>
-					<view class="t2">2021-08-21 至 2022-08-21</view>
+					<view class="t2">{{goodsDetail.desc}}</view>
 				</view>
 				<view class="card">
 					<view class="t1">
@@ -28,7 +28,7 @@
 						手机号码：
 					</view>
 					<view class="t2">
-						<text class="pho">123456789456</text>
+						<text class="pho">{{userInfo.mobile}}</text>
 						<el-button type="primary" :loading="true" plain size="mini">获取验证码</el-button>
 					</view>
 				</view>
@@ -61,24 +61,42 @@
 </template>
 
 <script>
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
+		},
+		props: {
+			goodsId: {
+				type: String,
+				default: ''
+			},
+		},
+		computed: {
+			...mapState({
+				userInfo: ({ user })  => user.userInfo,
+			})
 		},
 		data() {
 			return {
 				code:'',
 				checked:true,
+				goodsDetail:{},
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getDetail()
 		},
 		methods: {
+			getDetail(){
+				let that = this;
+				that.$http('ym.ykjDetail', {
+					id: that.goodsId
+				}).then(res => {
+					if (res.code === 1) {
+						that.goodsDetail = res.data 
+					}
+				});
+			},
 			toggleSelection(val){
 				console.log(val);
 			}

@@ -1,30 +1,7 @@
 
 import store from '@/shopro/store/index.js'
+import {API_URL} from '@/env'
 export default {
-
-	/**
-	 * 文件上传
-	 */
-	upload(url, path, callback = () => {}, fileName = 'image') {
-		uni.uploadFile({
-			url: this.baseUrl + url,
-			header: {
-				token: ''
-			},
-			filePath: path,
-			name: fileName,
-			complete: (res) => {
-				if (res.statusCode == 200) {
-					callback(JSON.parse(res.data));
-				} else {
-					callback({
-						state: 'fail',
-						msg: '上传失败'
-					});
-				}
-			}
-		});
-	},
 	/**
 	 * 获取随机数
 	 */
@@ -118,6 +95,47 @@ export default {
 	loginPopup(){
 		store.dispatch('showAuthModal');
 	},
+	/**
+	 * 图片处理-上传图片
+	 */
+		uploadImage(api, url) {
+			console.log(api, url);
+			let config_url = API_URL;
+			uni.showLoading({
+				title: '上传中'
+			});
+			let header = {}
+			let token = uni.getStorageSync('token');
+			header.token = token
+			return new Promise((resolve, reject) => {
+				uni.uploadFile({
+					url: config_url + api,
+					filePath: url,
+					name: 'file',
+					header: header,
+					success: res => {
+						res = JSON.parse(res.data);
+						console.log(JSON.stringify(res) + "意见反馈ONE");
+						if (res.code === 1) {
+							uni.hideLoading()
+							uni.showToast({
+								title: '上传成功',
+								icon: 'none'
+							});
+							resolve(res.data)
+						} else {
+							uni.hideLoading()
+							uni.showModal({
+								title: '上传失败',
+								content: res.msg
+							});
+						}
+					}
+				});
+			}).catch(e => {
+				reject(e)
+			})
+		},
 	/**
 		 * 剩余时间格式化
 		 * @param {Number} t - 剩余多少秒

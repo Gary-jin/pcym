@@ -3,7 +3,7 @@
 		<view class="">
 			<el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
 				<el-tab-pane label="单个预订" name="first">
-						<tab-pane1></tab-pane1>
+					<tab-pane1 :goodsId="goodsId"></tab-pane1>
 				</el-tab-pane>
 				<el-tab-pane label="批量预订" name="second">
 					<tab-pane2></tab-pane2>
@@ -35,7 +35,11 @@
 			tabN: {
 				type: String,
 				default: 'first'
-			}
+			},
+			goodsId: {
+				type: String,
+				default: ''
+			},
 		},
 		data() {
 			return {

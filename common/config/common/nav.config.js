@@ -219,8 +219,13 @@ export default {
 			icon:'iconfontAl icon-lingdai',
 			list:[
 				{
-					name:'过期域名',
+					name:'申请经纪',
 					itemVal:'6-1',
+					linkUrl:''
+				},
+				{
+					name:'我的经纪记录',
+					itemVal:'6-2',
 					linkUrl:''
 				}
 			]

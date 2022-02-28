@@ -2,14 +2,14 @@
 	<view style="padding: 15px;">
 		<view class="ymBox f_bc">
 			<view class="ymLeft">
-				<text class="lTit1">pengdeng.com.cn</text>
+				<text class="lTit1">{{goodsDetail.domain}}</text>
 				<text class="lTit2">推荐</text>
-				<el-tooltip class="item" effect="dark" content="未拦截" placement="top">
+				<!-- <el-tooltip class="item" effect="dark" content="未拦截" placement="top">
 					<i class="iconfontAl icon-weixin"></i>
 				</el-tooltip>
 				<el-tooltip class="item" effect="dark" content="安全" placement="top">
 					<i class="iconfontAl icon-qq"></i>
-				</el-tooltip>
+				</el-tooltip> -->
 			</view>
 			<view class="ymRight">
 				<text class="Rtext">综合查询</text>
@@ -19,49 +19,54 @@
 				<text class="Rtext">天眼查</text>
 			</view>
 		</view>
-		<view class="ymBox1">pengdeng</view>
+		<view class="ymBox1">{{goodsDetail.desc}}</view>
 		<view class="ymCen f_bc">
 			<view class="card">
 				<view class="t1">预订类型</view>
-				<view class="t2">NJ_PRE</view>
+				<view class="t2">{{goodsDetail.type}}</view>
 			</view>
 			<view class="card">
 				<view class="t1">删除时间</view>
-				<view class="t2">2022-02-20</view>
+				<view class="t2">{{goodsDetail.delete_date}}</view>
 			</view>
 			<view class="card">
 				<view class="t1">剩余时间</view>
-				<view class="t2">14时17分</view>
+				<view class="t2">{{goodsDetail.last_time}}</view>
 			</view>
 		</view>
 		
 		<template>
 		  <el-table ref="singleTable" :data="tableData" highlight-current-row
 		    @current-change="handleCurrentChange" style="width: 100%">
-				<el-table-column
-				  property="name1"
-				  label="通道">
-				</el-table-column>
+				
 		    <el-table-column
-		      property="name2"
-		      label="说明">
+		      property="number"
+		      label="通道">
 					<template slot-scope="scope">
-						<span style="margin-left: 10px">{{ scope.row.name2 }}</span>
-						<el-tooltip class="item" effect="dark" content="此通道成功率高" placement="top">
-							<i class="iconfontAl icon-wenhao"></i>
-						</el-tooltip>
+						<span style="margin-left: 10px">{{ scope.row.number }}号通道</span>
 					</template>
 		    </el-table-column>
-		    <el-table-column
-		      property="name3"
-		      label="起拍价格">
-		    </el-table-column>
-		    <el-table-column
-		      property="name4"
-		      label="预订保证金">
-		    </el-table-column>
 				<el-table-column
-				  property="name5"
+				  property="begin_price"
+				  label="起拍价格">
+					<template slot-scope="scope">
+						{{scope.row.currency=='USD'? '$'+ scope.row.begin_price + '（约￥'+scope.row.rmb_begin_price+'）': '￥'+scope.row.begin_price}}
+					</template>
+				</el-table-column>
+				
+				<el-table-column
+				  property="deposit_price"
+				  label="预订保证金">
+					<template slot-scope="scope">
+						{{scope.row.currency=='USD'? '$'+ scope.row.deposit_price + '（约￥'+scope.row.rmb_deposit_price+'）': '￥'+scope.row.deposit_price}}
+					</template>
+				</el-table-column>
+				
+				
+				
+				
+				<el-table-column
+				  property="suffix"
 				  label="支持后缀">
 				</el-table-column>
 		  </el-table>
@@ -88,39 +93,46 @@
 	export default {
 		components: {
 		},
+		props: {
+			goodsId: {
+				type: String,
+				default: ''
+			},
+		},
 		data() {
 			return {
 				agreement:true,
-				tableData: [{
-					name1: '14号通道',
-					name2: 'NJ预释放专用',
-					name3: '$69（约￥441）',
-					name4: '$20（约￥128）',
-					name5: '.com'
-				}, {
-					name1: '14号通道',
-					name2: 'NJ预释放专用',
-					name3: '$69（约￥441）',
-					name4: '$20（约￥128）',
-					name5: '.com'
-				}, {
-					name1: '14号通道',
-					name2: 'NJ预释放专用',
-					name3: '$69（约￥441）',
-					name4: '$20（约￥128）',
-					name5: '.com'
-				}],
+				tableData: [],
+				
+				goodsDetail:{},
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getDetail()
+			this.getList()
 		},
 		methods: {
+			getDetail(){
+				let that = this;
+				that.$http('ym.ydDetail', {
+					id: that.goodsId
+				}).then(res => {
+					if (res.code === 1) {
+						that.goodsDetail = res.data 
+					}
+				});
+			},
+			getList(){
+				let that = this;
+				that.$http('ym.ydChannel', {
+					id: that.goodsId
+					// id:65
+				}).then(res => {
+					if (res.code === 1) {
+						that.tableData = res.data 
+					}
+				});
+			},
 			handleCurrentChange(val) {
 				console.log(val);
 			}

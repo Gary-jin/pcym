@@ -152,15 +152,21 @@
 		methods: {
 			exHead(){
 				let that = this
-				uni.chooseFile({
-				  count: 1,
-					type: 'image',
-					success: function (res) {
-						that.avaUrl = res.tempFilePaths[0];
+				
+				uni.chooseImage({
+					count: 1,
+					sizeType: ['original', 'compressed'], 
+					sourceType: ['album'],
+					success: res => {
+						res.tempFilePaths.forEach(img => {
+							that.$util.uploadImage('common/upload', img).then(res => {
+								that.avaUrl = res.fullurl;
+							});
+						});
 					}
 				});
-				
-			}
+			},
+			
 		}
 	}
 </script>

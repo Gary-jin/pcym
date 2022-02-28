@@ -53,18 +53,33 @@ export default {
 	},
 	// 域名
 	ym:{
-		bidhot: {
-			url: "domains_bidding/hot",
-			auth: false,
-			method: "GET",
-			// desc: ' 热门竞价域名',
-		},
 		filtrate: {
 			url: "index/getFilter",
 			auth: false,
 			method: "GET",
 			// desc: ' 筛选项',
 		},
+
+		
+		bidhot: {
+			url: "domains_bidding/hot",
+			auth: false,
+			method: "GET",
+			// desc: ' 热门竞价域名',
+		},
+		bidList: {
+			url: "domains_bidding/domainsList",
+			auth: false,
+			method: "GET",
+			// desc: '  竞价域名列表',
+		},
+		bidDetail: {
+			url: "domains_bidding/domainsDetail",
+			auth: true,
+			method: "GET",
+			// desc: '  竞价域名详情',
+		},
+		
 
 		ydhot: {
 			url: "expires/hot",
@@ -78,6 +93,19 @@ export default {
 			method: "GET",
 			// desc: '  过期域名列表',
 		},
+		ydDetail: {
+			url: "expires/domainsDetail",
+			auth: true,
+			method: "GET",
+			// desc: '  过期域名详情',
+		},
+		ydChannel: {
+			url: "expires/channel",
+			auth: true,
+			method: "GET",
+			// desc: '预定通道',
+		},
+
 
 		ykjhot: {
 			url: "domains/hot",
@@ -91,6 +119,13 @@ export default {
 			method: "GET",
 			// desc: '  一口价域名列表',
 		},
+		ykjDetail: {
+			url: "domains/domainsDetail",
+			auth: true,
+			method: "GET",
+			// desc: '  一口价域名详情',
+		},
+		
 	}
 
 };

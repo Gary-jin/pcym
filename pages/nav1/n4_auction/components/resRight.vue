@@ -4,8 +4,8 @@
 		<view class="rightCore">
 			<view class="jjBox1 f_bc">
 				<view class="jLeft">
-					<text class="tit1">shujutong.cn</text>
-					<text class="tit2">数据通</text>
+					<text class="tit1">{{goodsDetail.domain}}</text>
+					<!-- <text class="tit2">数据通</text> -->
 				</view>
 				<view class="jRight">
 					<text class="tit">关注</text>
@@ -14,51 +14,63 @@
 					<text class="tit"> 分享</text>
 				</view>
 			</view>
-			<view class="jjBox2">原信息: 江苏瑞曼信息技术有限公司 2011-09-30</view>
+			<!-- <view class="jjBox2">原信息: 江苏瑞曼信息技术有限公司 2011-09-30</view> -->
+			<view class="jjBox2"></view>
 			<view class="cBox">
 				<view class="cText">
 					<view class="txt1">当前价格</view>
-					<view class="txt2 txt22">￥3446</view>
+					<view class="txt2 txt22">￥{{goodsDetail.price}}</view>
 				</view>
 				<view class="cText">
-					<view class="txt1">当前价格</view>
-					<view class="txt2">￥3446</view>
+					<view class="txt1">剩余时间</view>
+					<view class="txt2">
+						<count-down :timestamp="goodsDetail.delete_time" :separator="'zh'"></count-down>
+					</view>
 				</view>
 				<view class="cText">
-					<view class="txt1">当前价格</view>
-					<view class="txt2">￥3446</view>
+					<view class="txt1">当前领先</view>
+					<view class="txt2">-</view>
 				</view>
 				<view class="cText">
-					<view class="txt1">当前价格</view>
-					<view class="txt2">￥3446</view>
+					<view class="txt1">出价次数</view>
+					<view class="txt2">￥{{goodsDetail.next_bid}}</view>
 				</view>
 			</view>
 			<!--  -->
 			<view class="cBox2">
 				<view class="rowBox">
 					<view class="rLeft">类型：</view>
-					<view class="rRight">过期删除</view>
+					<view class="rRight">{{goodsDetail.type}}</view>
 				</view>
 				<view class="rowBox">
 					<view class="rLeft">交易类型：</view>
-					<view class="rRight">竞价（拍卖会）</view>
+					<view class="rRight">竞价</view>
 				</view>
 				<view class="rowBox">
-					<view class="rLeft">拍卖周期：</view>
-					<view class="rRight">2021-11-23 08:40:07 ~ 2021-11-23 08:40:07</view>
+					<view class="rLeft">结束时间：</view>
+					<view class="rRight">{{goodsDetail.delete_date}}</view>
 				</view>
 				<view class="rowBox">
 					<view class="rLeft">加价幅度：</view>
-					<view class="rRight rRightc">￥100</view>
+					<view class="rRight rRightc">￥{{goodsDetail.next_bid - goodsDetail.price}}</view>
 				</view>
-				<view class="rowBox">
+				<!-- <view class="rowBox">
 					<view class="rLeft">成交价：</view>
 					<view class="rRight rRightc">￥246.00 <text class="rRt">（含续费价: ￥솤棾.赈赈）</text></view>
+				</view> -->
+				<view class="rowBox">
+					<view class="rLeft">可用余额：</view>
+					<view class="rRight" style="display: flex;">
+						<text class="rRightc">￥{{userInfo.money}}</text>
+						<text class="main">
+							<navigator class="nav-item" :url="`/pages/managementCenter/index?tab=3-1`">充值</navigator>
+						</text>
+					</view>
 				</view>
 				<view class="rowBox">
 					<view class="rLeft">本次出价（￥）：</view>
 					<view class="rRight rRightc">
-						<el-input v-model="pic" style="width: 70px;"></el-input>
+						<el-input v-model="goodsDetail.next_bid" style="width: 70px;"></el-input>
 						<text class="rRtt">（将冻结￥100作为保证金）</text>
 						<el-button type="primary">闯入竞价</el-button>
 						<el-button type="primary" plain>刷   新</el-button>
@@ -101,14 +113,26 @@
 </template>
 
 <script>
+	import countDown from '@/components/countDown/countDown.vue'; 
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
-			
+			countDown
+		},
+		props: {
+			goodsId: {
+				type: String,
+				default: ''
+			},
+		},
+		computed: {
+			...mapState({
+				userInfo: ({ user })  => user.userInfo,
+			})
 		},
 		data() {
 			return {
-				activeName:'first',
-				pic:555,
+				goodsDetail:{},
 				tableData:[
 					{
 						date2: '张三',
@@ -119,16 +143,20 @@
 				],
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getDetail()
 		},
 		methods: {
-			
+			getDetail(){
+				let that = this;
+				that.$http('ym.bidDetail', {
+					id: that.goodsId
+				}).then(res => {
+					if (res.code === 1) {
+						that.goodsDetail = res.data 
+					}
+				});
+			},
 
 		}
 	}
@@ -225,6 +253,11 @@
 			}
 			.rRightc{
 				color: #FE2626;
+			}
+			.main{
+				color: $text-color-main;
+				padding: 0 20px;
+				width: 50px;
 			}
 			.rRt{
 				text-align: right;

@@ -2,39 +2,39 @@
 	<view>
 		<view class="userBox">
 			<el-image style="width: 150px; height: 150px;border-radius: 10px;"
-			      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-image>
+			      :src="userInfo.avatar"></el-image>
 			<view class="userCore">
 				<view class="f_cc_ls">
 					<view class="titBox">
 						<view class="tit1">会员ID：</view>
-						<view class="tit2 elip">11758</view>
+						<view class="tit2 elip">{{userInfo.user_id}}</view>
 					</view>
 					<view class="titBox">
 						<view class="tit1">用户名：</view>
-						<view class="tit2 elip">会员ID：</view>
+						<view class="tit2 elip">{{userInfo.username}}</view>
 					</view>
 					<view class="titBox">
 						<view class="tit1">登录IP：</view>
-						<view class="tit2 elip">会员ID：</view>
+						<view class="tit2 elip">{{userInfo.username}}</view>
 					</view>
 					<view class="titBox">
 						<view class="tit1">总积分：</view>
-						<view class="tit2 elip">会员ID：</view>
+						<view class="tit2 elip">{{userInfo.username}}</view>
 					</view>
 				</view>
 				<view class="f_cc_ls">
-					<view class="titBox">
+					<!-- <view class="titBox">
 						<view class="tit1">上次登录 ：</view>
 						<view class="tit2 elip">11758</view>
-					</view>
-					<view class="titBox">
+					</view> -->
+					<!-- <view class="titBox">
 						<view class="tit1">安全等级：</view>
 						<view class="tit3">
 							<i v-for="(item,index) in 4" :key="index"
 								:class="index<=rate?'icCol':'icN'"
 							class="el-icon-minus"></i>
 						</view>
-					</view>
+					</view> -->
 				</view>
 			</view>
 			<view class="btnUserBox">
@@ -49,7 +49,7 @@
 		<!--  -->
 		<view class="moneyBox">
 			<view class="moneyLeft">
-				<view class="m1">78945</view>
+				<view class="m1">{{userInfo.money}}</view>
 				<view class="m2">总金额（元）</view>
 			</view>
 			<view class="moneyCen">
@@ -59,19 +59,19 @@
 				</view>
 				<view class="cenBox">
 					<view class="c1">78945</view>
-					<view class="c2">可用金额(元)</view>
+					<view class="c2">已冻结金额(元)</view>
 				</view>
 				<view class="cenBox">
 					<view class="c1">78945</view>
-					<view class="c2">可用金额(元)</view>
+					<view class="c2">可提现金额(元)</view>
 				</view>
 				<view class="cenBox">
 					<view class="c1">78945</view>
-					<view class="c2">可用金额(元)</view>
+					<view class="c2">不可提现金额</view>
 				</view>
 				<view class="cenBox">
 					<view class="c1">78945</view>
-					<view class="c2">可用金额(元)</view>
+					<view class="c2">消费积分</view>
 				</view>
 			</view>
 			<view class="moneyRight">
@@ -210,7 +210,7 @@
 </template>
 
 <script>
-
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			
@@ -219,6 +219,11 @@
 			return {
 				rate: 2,
 			}
+		},
+		computed: {
+			...mapState({
+				userInfo: ({ user }) => user.userInfo
+			})
 		},
 		mounted() {
 			console.log("111");

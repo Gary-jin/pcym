@@ -48,7 +48,7 @@
 		},
 		methods: {
 			handleOpen(item) {
-				this.$emit('typeTab',item.itemVal)
+				this.$emit('typeTab',item)
 			},
 		}
 	}

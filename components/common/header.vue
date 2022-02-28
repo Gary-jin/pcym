@@ -17,17 +17,17 @@
 				<view class="topbar_welcome" style="padding-right: 15px;">欢迎回来</view>
 				<view class="userBox userBox2">
 					ID：
-					<text class="main">999888</text>
-					（普通会员）
+					<text class="main">{{userInfo.user_id}}</text>
+					<!-- （普通会员） -->
 				</view>
 				<view class="userBox userBox2">
 					总金额：
-					<text class="redTe">999888</text>
+					<text class="redTe">{{userInfo.money}}</text>
 				</view>
-				<view class="userBox userBox2">
+				<!-- <view class="userBox userBox2">
 					可用：
 					<text class="redTe">999888</text>
-				</view>
+				</view> -->
 				<view class="userBox userBox2">
 					消息：(<text class="redTe">
 						<navigator class="nav-item" style="display: inline-block;" :url="`/pages/managementCenter/index?tab=1-4`">2</navigator>

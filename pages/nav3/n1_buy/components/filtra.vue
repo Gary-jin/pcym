@@ -33,19 +33,19 @@
 						<view class="d_f_c">
 							<el-checkbox style="height: 45px;margin-right: 10px;" @change="togType1(checkedSuffix)" v-model="checkedSuffix">不限</el-checkbox>
 							<el-checkbox-group @change="checkedSuffix = false" v-model="ruleForm.suffix">
-								<el-checkbox :label="index" name="type" v-for="(item,index) in filtraList.suffix" :key="index">{{item}}</el-checkbox>
+								<el-checkbox :label="item" name="type" v-for="(item,index) in filtraList.suffix" :key="index">{{item}}</el-checkbox>
 							</el-checkbox-group>
 						</view>
 					</el-form-item>
 					<view class="f_bc itemBox">
-						<el-form-item label="长度" prop="">
+						<el-form-item label="长度范围" prop="">
 							<view class="itemCore">
 								<el-input v-model="ruleForm.min_length" type="number" min="0" size="small" placeholder=""></el-input>
 								<i class="el-icon-minus"></i>
 								<el-input v-model="ruleForm.max_length" type="number" min="0" size="small" placeholder=""></el-input>
 							</view>
 						</el-form-item>
-						<el-form-item label="价格" prop="">
+						<el-form-item label="价格范围" prop="">
 							<view class="itemCore">
 								<el-input v-model="ruleForm.min_price" type="number" min="0" size="small" placeholder=""></el-input>
 								<i class="el-icon-minus"></i>
@@ -169,6 +169,8 @@
 				this.ruleForm.besides_match=[];//排除开头 //排除结尾
 				this.ruleForm.min_length='';//长度区间最低
 				this.ruleForm.max_length='' ;//长度区间最高
+				this.ruleForm.max_price='';//价格区间最低
+				this.ruleForm.max_length='' ;//价格区间最高
 				// this.ruleForm.reg_time='';//注册日期
 				// this.ruleForm.type=[];//预订类型
 				// this.ruleForm.expire_time=''

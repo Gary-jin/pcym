@@ -72,7 +72,6 @@
 		},
 		data() {
 			return {
-				totalNum: 0,
 				pagin: {
 					page: 1, //页码
 					pagesize: 50 //条数
@@ -80,6 +79,7 @@
 				ruleForm: {},
 				checked: false,
 				
+				totalNum: 0,
 				list:[],
 			}
 		},
@@ -121,7 +121,7 @@
 			deleteRow(index,item){
 				if(this.isLogin){
 					uni.navigateTo({
-						url: `/pages/nav1/n2_ymYd/index?tab=first`
+						url: `/pages/nav1/n2_ymYd/index?id=${item.id}&tab=first`
 					});					
 				} else{
 					this.$util.loginPopup()

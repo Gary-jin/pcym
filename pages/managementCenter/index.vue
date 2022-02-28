@@ -37,7 +37,7 @@
 		methods: {
 			typeTab(e){
 				console.log(e);
-				this.typeNum = e
+				this.typeNum = e.itemVal
 			}
 		}
 	}

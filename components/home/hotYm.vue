@@ -7,7 +7,7 @@
 				<view class="rmdCard" v-for="(item,index) in datalist" :key="index">
 					<view class="top">{{item.domain}}</view>
 					<view class="cen">￥{{item.price}}</view>
-					<view class="btn">剩余时间 <text>{{item.time}}</text> </view>
+					<view class="btn">过期时间 <text>{{item.delete_date}}</text> </view>
 				</view>
 			</view>
 		</view>

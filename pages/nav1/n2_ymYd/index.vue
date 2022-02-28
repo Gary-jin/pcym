@@ -2,11 +2,11 @@
 	<view>
 		<qj-header></qj-header>
 		<qj-nav :navVal="'nav1'"></qj-nav>
-		<bread-crumb :pages="[{name: '过期域名'},{name: '域名预定'}]" separator=">"></bread-crumb>
+		<bread-crumb :pages="[{name: '过期域名',linkUrl:'/pages/nav1/n1_expire/index'},{name: '域名预定'}]" separator=">"></bread-crumb>
 		<view class="f_cc_ls">
 			<view class="core f_b">
 				<res-left></res-left>
-				<res-right :tabN="tabVal"></res-right>
+				<res-right :goodsId="goodsId" :tabN="tabVal"></res-right>
 			</view>			
 		</view>
 		
@@ -23,13 +23,15 @@
 		},
 		data() {
 			return {
-				tabVal:''
+				tabVal:'',
+				goodsId:'',
 			}
 		},
 		onLoad(option) {
 			if(option.tab){
 				this.tabVal = option.tab
 			}
+			this.goodsId = option.id 
 		},
 		onShow() {
 			

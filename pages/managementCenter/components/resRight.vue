@@ -22,6 +22,9 @@
 		<ymgl-e v-if="tabNum=='5-5'"></ymgl-e>
 		<ymgl-f v-if="tabNum=='5-6'"></ymgl-f>
 		<ymgl-mb v-if="tabNum=='5-7'"></ymgl-mb>
+		<!-- 域名经纪 -->
+		<middleman-a v-if="tabNum=='6-1'"></middleman-a>
+		<middleman-b v-if="tabNum=='6-2'"></middleman-b>
 	</view>
 </template>
 
@@ -48,12 +51,17 @@
 	import ymglE from './a5_ymgl/l5_five.vue';
 	import ymglF from './a5_ymgl/l6_six.vue';
 	import ymglMb from './a5_ymgl/l7_muban.vue';
+	// 域名经纪
+	import middlemanA from './a6_ymMiddleman/ym1_sq.vue';
+	import middlemanB from './a6_ymMiddleman/ym2_list.vue';
+	
 	export default {
 		components: {
 			userA,userB,userC,userD,
 			moneyA,moneyB,moneyC,moneyD,
 			ymA,ymB,ymC,
-			ymglA,ymglB,ymglC,ymglD,ymglE,ymglF,ymglMb
+			ymglA,ymglB,ymglC,ymglD,ymglE,ymglF,ymglMb,
+			middlemanA,middlemanB
 		},
 		props: {
 			tabNum: {

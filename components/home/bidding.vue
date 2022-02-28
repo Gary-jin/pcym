@@ -4,16 +4,16 @@
 		<view class="f_cc_ls rmdbg2">
 			<title-home style="margin: 50px 0 30px 0;" @change="change" :title="title" :subhead="subhead"></title-home>
 			<view class="core_f rmdCardBox">
-				<view class="rmdCard" v-for="(item,index) in 8" :key="index">
-					<view class="top">.cn</view>
-					<view class="wurl">fastgold.com</view>
+				<view class="rmdCard" v-for="(item,index) in datalist" :key="index">
+					<view class="top">{{item.suffix}}</view>
+					<view class="wurl">{{item.domain}}</view>
 					<view class="cenBox">
 						<view class="cen1">
-							<view class="tx1">26854.00</view>
+							<view class="tx1">{{item.price}}</view>
 							<view class="tx2">当前价格</view>
 						</view>
 						<view class="cen1">
-							<view class="tx3">1天12时32分</view>
+							<view class="tx3">{{item.delete_date}}</view>
 							<view class="tx2">剩余时间</view>
 						</view>
 					</view>
@@ -53,9 +53,9 @@
 		methods: {
 			getList() {
 				let that = this;
-				that.$http('ym.bidhot', {}, '').then(res => {
+				that.$http('ym.bidhot', {pagesize:8}, '').then(res => {
 					if (res.code === 1) {
-						that.datalist = res.data
+						that.datalist = res.data.data
 					}
 				});
 			},

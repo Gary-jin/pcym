@@ -6,7 +6,7 @@
 		<view class="f_cc_ls">
 			<view class="core f_b">
 				<res-left></res-left>
-				<res-right></res-right>
+				<res-right :goodsId="goodsId"></res-right>
 			</view>			
 		</view>
 		
@@ -26,7 +26,9 @@
 				
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			console.log('竞价id',option);
+			this.goodsId = option.id 
 		},
 		onShow() {
 			

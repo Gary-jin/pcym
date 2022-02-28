@@ -128,10 +128,10 @@
 				});
 			},
 			// 单个购买
-			deleteRow(index, rows){
+			deleteRow(index, item){
 				if(this.isLogin){				
 					uni.navigateTo({
-						url: `/pages/nav3/n1_buy/detailBuySingle`
+						url: `/pages/nav3/n1_buy/detailBuySingle?id=${item.id}`
 					});
 				} else{
 					this.$util.loginPopup()
