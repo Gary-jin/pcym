@@ -17,7 +17,7 @@
 							<view class="tx2">剩余时间</view>
 						</view>
 					</view>
-					<view class="jBtn">
+					<view class="jBtn" @click="goDetail(item)">
 						<text>竞价</text>
 						<image class="gg1" src="../../static/image/home/icon3.png" mode="widthFix"></image>
 						<image class="gg2" src="../../static/image/home/icon2.png" mode="widthFix"></image>
@@ -30,6 +30,7 @@
 
 <script>
 	import titleHome from '@/components/home/title.vue'; 
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			titleHome
@@ -47,6 +48,11 @@
 		onShow() {
 			
 		},
+		computed: {
+			...mapState({
+				isLogin: ({ user })  => user.isLogin,
+			})
+		},
 		mounted() {
 			this.getList()
 		},
@@ -60,8 +66,19 @@
 				});
 			},
 			change(e){
-				console.log('xx');
-			}
+				uni.navigateTo({
+				    url: `/pages/nav1/n4_auction/index`
+				});
+			},
+			goDetail(item){
+				if(this.isLogin){
+					uni.navigateTo({
+							url: `/pages/nav1/n4_auction/detail?id=${item.id}`
+					});				
+				} else{
+					this.$util.loginPopup()
+				}
+			},
 		}
 	}
 </script>

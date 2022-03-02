@@ -126,6 +126,33 @@ export default {
 			// desc: '  一口价域名详情',
 		},
 		
+	},
+	member :{
+		addGroup: {
+			url: "member_domains/addGroup",
+			auth: true,
+			method: "POST",
+			// desc: '添加分组',
+		},
+		groupList: {
+			url: "member_domains/groupList",
+			auth: true,
+			method: "GET",
+			// desc: '分组列表',
+		},
+		domainGroup: {
+			url: "member_domains/domainGroup",
+			auth: true,
+			method: "POST",
+			// desc: '域名分组',
+		},
+		myDomains: {
+			url: "member_domains/myDomains",
+			auth: true,
+			method: "GET",
+			// desc: '我的域名',
+		},
+
 	}
 
 };

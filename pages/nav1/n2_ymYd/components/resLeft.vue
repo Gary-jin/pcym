@@ -6,38 +6,27 @@
 				<view class="l1"></view>
 				<view class="l2">热门推荐</view>
 			</view>
-			<view class="titleR">更多</view>
+			<view class="titleR"></view>
 		</view>
 		<!-- table -->
 		<view class="tableBox">
-			 <el-table
-			    :data="tableData"
+			<el-table
+			    :data="datalist"
 			    style="width: 100%">
-			    <el-table-column
-			      type="index"
-						width="23"
-						>
-			    </el-table-column>
-			    <el-table-column
-			      prop="url"
-			      label="日期"
-			      width="210">
-			    </el-table-column>
-					
+			    <el-table-column type="index" ></el-table-column>
+			    <el-table-column prop="domain" label="域名"></el-table-column>
 					<el-table-column
-						label="操作"
-						width="50"
-						>
+						label="操作">
 						<template slot-scope="scope">
 							<el-button
-								@click.native.prevent="deleteRow(scope.$index, tableData)"
+								@click.native.prevent="deleteRow(scope.$index, datalist[scope.$index])"
 								type="text"
 								size="small">
-								移除
+								预定
 							</el-button>
 						</template>
 					</el-table-column>
-			  </el-table>
+			</el-table>
 		</view>
 		<view style="height: 20px;"></view>
 		<!-- title -->
@@ -64,25 +53,26 @@
 		},
 		data() {
 			return {
-				tableData:[{
-					url:"2935.com"
-				},{
-					url:"2935.com"
-				},{
-					url:"2935.com"
-				}]
+				datalist:[]
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getList()
 		},
 		methods: {
-			
+			getList() {
+				let that = this;
+				that.$http('ym.ydhot', {pagesize:15}, '').then(res => {
+					if (res.code === 1) {
+						that.datalist = res.data.data.data
+					}
+				});
+			},
+			deleteRow(index,item){
+				uni.navigateTo({
+					url: `/pages/nav1/n2_ymYd/index?id=${item.id}&tab=first`
+				});
+			},
 		}
 	}
 </script>

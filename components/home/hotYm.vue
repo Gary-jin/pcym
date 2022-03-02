@@ -4,7 +4,7 @@
 		<view class="f_cc_ls rmdbg2">
 			<title-home style="margin: 50px 0 30px 0;" @change="change" :title="title" :subhead="subhead"></title-home>
 			<view class="core_f rmdCardBox">
-				<view class="rmdCard" v-for="(item,index) in datalist" :key="index">
+				<view class="rmdCard" @click="goDetail(item)" v-for="(item,index) in datalist" :key="index">
 					<view class="top">{{item.domain}}</view>
 					<view class="cen">￥{{item.price}}</view>
 					<view class="btn">过期时间 <text>{{item.delete_date}}</text> </view>
@@ -16,6 +16,7 @@
 
 <script>
 	import titleHome from '@/components/home/title.vue'; 
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			titleHome
@@ -30,6 +31,11 @@
 		onLoad(admin) {
 			console.log(admin);
 		},
+		computed: {
+			...mapState({
+				isLogin: ({ user })  => user.isLogin,
+			})
+		},
 		mounted() {
 			this.getList()
 		},
@@ -43,8 +49,19 @@
 				});
 			},
 			change(e){
-				console.log(e);
-			}
+				uni.navigateTo({
+				    url: `/pages/nav3/n1_buy/index`
+				});
+			},
+			goDetail(item){
+				if(this.isLogin){
+					uni.navigateTo({
+							url: `/pages/nav3/n1_buy/detailBuySingle?id=${item.id}`
+					});				
+				} else{
+					this.$util.loginPopup()
+				}
+			},
 		}
 	}
 </script>
@@ -73,7 +90,7 @@
 					height: 61px;
 					line-height: 61px;
 					background: #F9FBFF;
-					font-size: 24px;
+					font-size: 18px;
 					font-weight: 600;
 					color: $text-color2;
 				}

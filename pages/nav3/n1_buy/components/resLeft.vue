@@ -6,34 +6,28 @@
 				<view class="l1"></view>
 				<view class="l2">一口价推荐</view>
 			</view>
-			<view class="titleR">更多</view>
+			<view class="titleR"></view>
 		</view>
 		<!-- table -->
 		<view class="tableBox">
 			 <el-table
-			    :data="tableData"
+			    :data="datalist"
 			    style="width: 100%">
-			    <el-table-column
-			      type="index"
-						width="23"
-						>
+			    <el-table-column type="index">
 			    </el-table-column>
 			    <el-table-column
-			      prop="url"
-			      label="日期"
-			      width="210">
+			      prop="domain"
+			      label="域名">
 			    </el-table-column>
 					
 					<el-table-column
-						label="操作"
-						width="50"
-						>
+						label="操作">
 						<template slot-scope="scope">
 							<el-button
-								@click.native.prevent="deleteRow(scope.$index, tableData)"
+								@click.native.prevent="deleteRow(scope.$index, datalist[scope.$index])"
 								type="text"
 								size="small">
-								移除
+								购买
 							</el-button>
 						</template>
 					</el-table-column>
@@ -64,25 +58,26 @@
 		},
 		data() {
 			return {
-				tableData:[{
-					url:"2935.com"
-				},{
-					url:"2935.com"
-				},{
-					url:"2935.com"
-				}]
+				datalist:[]
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getList()
 		},
 		methods: {
-			
+			getList() {
+				let that = this;
+				that.$http('ym.ykjhot', {pagesize:8}, '').then(res => {
+					if (res.code === 1) {
+						that.datalist = res.data.data
+					}
+				});
+			},
+			deleteRow(index,item){
+				uni.navigateTo({
+					url: `/pages/nav3/n1_buy/detailBuySingle?id=${item.id}`
+				});
+			},
 		}
 	}
 </script>

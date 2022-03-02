@@ -126,7 +126,7 @@
 						
 						<el-form-item label="所属区域">
 							<view class="itemW">
-								<region></region>
+								<region @getAddress="getAddress"></region>
 							</view>
 						</el-form-item>	
 						<el-form-item label="通讯地址（中文）" >
@@ -220,13 +220,7 @@
 				
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
 		},
 		methods: {
 			handleSelect(e){
@@ -235,6 +229,9 @@
 			onSubmit() {
 				console.log(this.checked);
 				console.log('submit!');
+			},
+			getAddress(e){
+				console.log(e);
 			},
 			changeRow(val){
 				this.numLength = this.$util.textareaLength(val);

@@ -74,33 +74,48 @@
 		  <el-table
 				ref="multipleTable"
 		    :data="tableData"
-		    style="width: 100%"
-		    max-height="250">
+		    style="width: 100%">
 				<el-table-column type="selection"></el-table-column>
-				<el-table-column label="域名"  align="center">
+				<el-table-column prop="domain" label="域名"  ></el-table-column>
+				<el-table-column prop="reg_time" label="注册时间" sortable></el-table-column>
+				<el-table-column prop="delete_date" label="到期时间" sortable></el-table-column>
+				<!-- <el-table-column prop="date4" label="注册商"></el-table-column> -->
+				<el-table-column label="分组" >
 					<template slot-scope="scope">
-						<el-button type="text" size="small"
-							@click.native.prevent="goDetail(scope.$index, tableData[scope.$index])">
-							{{ scope.row.date1 }}
-						</el-button>
+					  <span>{{scope.row.group.name ?scope.row.group.name:'未分组'}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="date2" label="注册时间" sortable></el-table-column>
-				<el-table-column prop="date3" label="到期时间" sortable></el-table-column>
-				<el-table-column prop="date4" label="注册商"></el-table-column>
-				<el-table-column prop="date5" label="分组" ></el-table-column>
-				<el-table-column prop="date6" label="DNS" ></el-table-column>
-				<el-table-column prop="date7" label="状态" ></el-table-column>
+				
+				<!-- <el-table-column
+					prop="group.name"
+					label="分组"
+					width="100"
+					:filters="groupList"
+					:filter-method="filterTag"
+					filter-placement="bottom-end">
+					<template slot-scope="scope">
+						<el-tag
+							:type="scope.row.group.name === 'sxc' ? 'primary' : 'success'"
+							disable-transitions>{{scope.row.group.name}}</el-tag>
+					</template>
+				</el-table-column> -->
+				
+				
+				
+				<!-- <el-table-column prop="date6" label="DNS" ></el-table-column> -->
+				<el-table-column  label="状态" >
+					<template slot-scope="scope">
+					  <span v-if="scope.row.status==1">正常</span>
+						<span v-if="scope.row.status==2">正在出售</span>
+						<span v-if="scope.row.status==3">转出中</span>
+					</template>
+				</el-table-column>
 		    <el-table-column
-		      label="操作"
-		      width="120">
+		      label="操作">
 		      <template slot-scope="scope">
-		        <el-button
-		          @click.native.prevent="goDetail(scope.$index, tableData[scope.$index])"
-		          type="text"
-		          size="small">
-		          xxx
-		        </el-button>
+		        <text style="padding: 0 3px;">管理</text>
+						<text style="padding: 0 3px;">续费</text>
+						<text style="padding: 0 3px;">解析</text>
 		      </template>
 		    </el-table-column>
 				
@@ -129,11 +144,11 @@
 				<el-pagination
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
-					:current-page="4"
-					:page-sizes="[100, 200, 300, 400]"
-					:page-size="100"
+					:current-page="pagin.page"
+					:page-sizes="[50, 100, 200]"
+					:page-size="pagin.pagesize"
 					layout="total, sizes, prev, pager, next, jumper"
-					:total="400">
+					:total="totalNum">
 				</el-pagination>
 			</view>
 		</view>	
@@ -159,44 +174,38 @@
 				options: [{
 					value: '选项1',
 					label: '黄金糕'
-				}, {
-					value: '选项2',
-					label: '双皮奶'
-				}],
-				tableData:[
-					{
-						date1: '95310.cn',
-						date2: '	包头顺通',
-						date3: '建站历史',
-						date4: 'DEL',
-						date5: '9',
-						date6: '-',
-						date7: '￥124',
-						date8: '7时49分'
-					},
-					{
-						date1: '95310.cn',
-						date2: '	包头顺通',
-						date3: '建站历史',
-						date4: 'DEL',
-						date5: '2',
-						date6: '-',
-						date7: '￥126',
-						date8: '7时40分'
-					}
-				],
-				checked: false
+				},],
+				tableData:[],
+				checked: false,
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
+				},
+				
+				groupList:[
+					{ text: 'sxc', value: 'sxc' }, 
+					{ text: '公司', value: '公司' }
+				]
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getList()
 		},
 		methods: {
+			getList(){
+				let that = this;
+				that.$http('member.myDomains', 
+					{
+						...that.pagin,
+						...that.form
+					}).then(res => {
+					if (res.code === 1) {
+						that.tableData = res.data.data
+						that.totalNum = res.data.total
+					}
+				});
+			},
 			handleSelect(e){
 				this.tabNum = e
 			},
@@ -223,6 +232,10 @@
 				} else {
 					this.$refs.multipleTable.clearSelection();
 				}
+			},
+			filterTag(value, row) {
+				console.log(value, row);
+				return row.tag === value;
 			},
 		}
 	}

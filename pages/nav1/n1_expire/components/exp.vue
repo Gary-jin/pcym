@@ -72,6 +72,7 @@
 		},
 		data() {
 			return {
+				totalNum: 0,
 				pagin: {
 					page: 1, //页码
 					pagesize: 50 //条数
@@ -79,7 +80,6 @@
 				ruleForm: {},
 				checked: false,
 				
-				totalNum: 0,
 				list:[],
 			}
 		},

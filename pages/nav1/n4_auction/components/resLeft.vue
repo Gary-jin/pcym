@@ -10,24 +10,18 @@
 		</view>
 		<!-- table -->
 		<view class="tableBox">
-			 <el-table :data="tableData" style="width: 100%" 	ref="multipleTable">
-			    <el-table-column prop="url" label="日期"></el-table-column>
-					<el-table-column label="当前价格" >
+			 <el-table :data="datalist" style="width: 100%" 	ref="multipleTable">
+					<el-table-column type="index" ></el-table-column>
+					<el-table-column label="域名">
 						<template slot-scope="scope">
-							<el-button type="text" size="small"
-								@click.native.prevent="goDetail(scope.$index, tableData[scope.$index])">
-								{{ scope.row.data1 }}
+							<el-button type="text"
+								@click.native.prevent="goDetail(scope.$index, datalist[scope.$index])">
+								{{ scope.row.domain }}
 							</el-button>
 						</template>
 					</el-table-column>
-					<el-table-column label="剩余时间" >
-						<template slot-scope="scope">
-							<el-button type="text" size="small"
-								@click.native.prevent="goDetail(scope.$index, tableData[scope.$index])">
-								{{ scope.row.data2 }}
-							</el-button>
-						</template>
-					</el-table-column>
+					<el-table-column prop="price" label="价格"></el-table-column>
+			    <!-- <el-table-column prop="delete_date" label="剩余时间"></el-table-column> -->
 			  </el-table>
 		</view>
 		<view style="height: 20px;"></view>
@@ -54,34 +48,24 @@
 		},
 		data() {
 			return {
-				tableData:[{
-					url:"2935.com",
-					data1:'￥12.00',
-					data2:'12时43分'
-				},{
-					url:"2935.com",
-					data1:'￥12.00',
-					data2:'12时43分'
-				},{
-					url:"2935.com",
-					data1:'￥12.00',
-					data2:'12时43分'
-				}]
+				datalist:[]
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getList()
 		},
 		methods: {
-			goDetail(index, rows){
-				console.log(index,rows);
+			getList() {
+				let that = this;
+				that.$http('ym.bidhot', {pagesize: 8}, '').then(res => {
+					if (res.code === 1) {
+						that.datalist = res.data.data
+					}
+				});
+			},
+			goDetail(index, item){
 				uni.navigateTo({
-				    url: `/pages/nav1/n4_auction/detail`
+					url: `/pages/nav1/n4_auction/detail?id=${item.id}`
 				});
 			},
 		}

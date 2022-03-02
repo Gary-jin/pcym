@@ -14,7 +14,7 @@
 		<view v-if="tabNum=='1'">
 			<view class="fenziBox">
 				<el-input v-model="input" ></el-input>
-				<el-button type="primary">添加新分组</el-button>
+				<el-button @click="addGroup" type="primary">添加新分组</el-button>
 			</view>
 			<template>
 				<el-table
@@ -22,7 +22,7 @@
 					:data="tableData"
 					style="width: 100%;padding: 0 20px;"
 					max-height="250">
-					<el-table-column prop="date1" label="分组名称"></el-table-column>
+					<el-table-column prop="name" label="分组名称"></el-table-column>
 					<el-table-column prop="date2" label="域名数量"></el-table-column>
 					<el-table-column
 						label="操作"
@@ -64,21 +64,20 @@
 		<!-- 批量分组 -->
 		<view class="d_f" v-if="tabNum=='2'">
 			<view class="formBox">
-				<el-form ref="form" :model="form" label-width="80px">
-					<el-form-item label="域名" >
+				<el-form ref="form" :rules="rules" :model="form" label-width="80px">
+					<el-form-item label="域名" prop="domains">
 						<el-input
 						  type="textarea"
 						  :rows="4"
-							@input="changeRow(form.name)"
+							@input="changeRow(textVal)"
 						  placeholder="每行一个域名,一次最多1000个"
-						  v-model="form.name">
+						  v-model="textVal">
 						</el-input>
 						<text>您已经填写 <text class="numSize">{{numLength}}</text> 个域名，还可添加 <text class="numSize">{{1000-numLength}}</text> 个</text>
 					</el-form-item>
-					<el-form-item label="分组" >
-						<el-select v-model="form.region" placeholder="请选择">
-							<el-option label="区域一" value="shanghai"></el-option>
-							<el-option label="区域二" value="beijing"></el-option>
+					<el-form-item label="分组" prop="group_id">
+						<el-select v-model="form.group_id" placeholder="请选择">
+							<el-option v-for="(item,index) in tableData" :label="item.name" :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -92,7 +91,6 @@
 </template>
 
 <script>
-
 	export default {
 		components: {
 			
@@ -101,40 +99,66 @@
 			return {
 				tabNum:'1',
 				input:'',
-				tableData:[
-					{
-						date1:'分组1',
-						date2:'23'
-					},
-					{
-						date1:'分组2',
-						date2:'23'
-					}
-				],
+				tableData:[],
+				textVal:'',
 				form: {
-					name: '',
-					region:''
+					domains: [],
+					group_id:''
+				},
+				rules:{
+					group_id: [
+						{ required: true, message: '请选择分组', trigger: 'change' }
+					],
+					domains: [
+						{ required: true, message: '请填写域名', trigger: 'blur' }
+					]
 				},
 				numLength: 0
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.groupList()
 		},
 		methods: {
+			addGroup() {
+				let that = this;
+				if(!that.input){
+					that.$util.showErrorMsg('请填写分组名称');
+					return
+				}
+				that.$http('member.addGroup', {group_name:that.input}, '').then(res => {
+					if (res.code === 1) {
+						that.$util.showErrorMsg('添加成功');
+						that.groupList()
+					}else{
+						that.$util.showErrorMsg(res.msg);
+					}
+				});
+			},
+			groupList(){
+				let that = this;
+				that.$http('member.groupList').then(res => {
+					if (res.code === 1) {
+						this.tableData = res.data
+					}
+				});
+			},
 			handleSelect(e){
 				this.tabNum = e
 			},
 			onSubmit() {
-				console.log('submit!');
+				console.log(this.form);
+				this.$refs['form'].validate((valid) => {
+					if (valid) {
+						this.$http('member.domainGroup',{...this.form}).then(res => {
+							this.$util.showErrorMsg(res.msg);
+						});
+					} 
+				});
 			},
 			changeRow(val){
 				this.numLength = this.$util.textareaLength(val);
+				this.form.domains = this.$util.textareaList(val);
 			}
 		}
 	}
@@ -173,6 +197,7 @@
 	.formBox{
 		width: 90%;
 		margin-left: 20px;
+		padding: 20px 0;
 		.el-form{
 			width: 550px;
 		}

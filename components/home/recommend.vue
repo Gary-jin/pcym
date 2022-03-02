@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!--  -->
-		<view class="f_cc_ls rmdbg">
+		<!-- <view class="f_cc_ls rmdbg">
 			<view class="core_f rmdTop" @click="goYmList()">
 				<text class="tit1">预定推荐：</text>
 				近期有 <text class="tit2">{{total}}</text> 个域名即将被删除
@@ -11,7 +11,7 @@
 					{{item.domain}}
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<!--  -->
 		<!-- <view class="f_cc_ls rmdbg2">
 			<title-home style="margin: 50px 0 30px 0;" @change="change" :title="title" :subhead="subhead"></title-home>
@@ -23,6 +23,22 @@
 				</view>
 			</view>
 		</view> -->
+		<view class="f_cc_ls rmdbg3">
+			<ivew class='core advBox'>
+				<view class="title">
+					此处应是大标题，内容甲方自己需提供
+				</view>
+				<view class="subTitle">
+					共享亿金融级安全体系，从核心到外围多层防护&监控体系，全
+					基于巨石自主研发的飞天云，确保电子邮件服务全天候可用
+					误删邮件轻松找回，邮件管理更安全、更放心
+				</view>
+				 <el-button class="titBtn" round>点击查看</el-button>
+			</ivew>
+			<view class="imgBox">
+				<image class="topPic" src="../../static/image/common/rgb3.png" mode="widthFix"></image>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -163,5 +179,69 @@
 				}
 			}
 		}
+	}
+	
+	.rmdbg3{
+		width: 100%;
+		height: 430px;
+		background-image: url(../../static/image/common/rbg3b.png);
+		background-size: 100% 100%;
+		position: relative;
+		overflow: hidden;
+		.imgBox{
+			position: absolute;
+			right: 144px;
+			top: -105px;
+			width: 1230px;
+			height: 630px;
+			.topPic{
+				width: 100%;
+				height: 100%;
+				animation: zoomIn 8s  infinite alternate;
+			}
+		}
+		.advBox{
+			color: #FFFFFF;
+			.title{
+				font-size: 32px;
+				font-weight: normal;
+				margin: 90px 0 10px 0;
+			}
+			.subTitle{
+				width: 444px;
+				font-size: 16px;
+				font-weight: 400;
+			}
+			.titBtn{
+				border: 1px #FFFFFF solid;
+				color: #FFFFFF;
+				background: none;
+				margin-top: 20px;
+			}
+		}
+	}
+	
+	@-webkit-keyframes zoomIn {
+	    0% {
+	        opacity: .3;
+	        -webkit-transform: scale3d(.9,.9,.9);
+	        transform: scale3d(.9,.9,.9)
+	    }
+	
+	    50% {
+	        opacity: 1
+	    }
+	}
+	
+	@keyframes zoomIn {
+	    0% {
+	        opacity: .3;
+	        -webkit-transform: scale3d(.9,.9,.9);
+	        transform: scale3d(.9,.9,.9)
+	    }
+	
+	    50% {
+	        opacity: 1
+	    }
 	}
 </style>
