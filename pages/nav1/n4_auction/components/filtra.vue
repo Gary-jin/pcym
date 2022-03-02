@@ -152,19 +152,7 @@
 				this.$emit('submitForm',this.ruleForm)
 			},
 			resetForm(){
-				this.ruleForm.rule= '';//快速查询/构成
-				this.ruleForm.suffix=[];//后缀
-				this.ruleForm.key= [];//关键字
-				this.ruleForm.key_match=[];//关键字开头 //关键字结尾
-				this.ruleForm.besides='';//排除
-				this.ruleForm.besides_match=[];//排除开头 //排除结尾
-				this.ruleForm.min_length='';//长度区间最低
-				this.ruleForm.max_length='' ;//长度区间最高
-				this.ruleForm.min_price='';//价格区间最低 
-				this.ruleForm.max_price='' ;//价格区间最高
-				// this.ruleForm.reg_time='';//注册日期
-				this.ruleForm.type=[];//预订类型
-				this.ruleForm.expire_time='';
+				this.$refs['ruleForm'].resetFields();
 				this.textVal = ''
 			},
 			togType1(val){

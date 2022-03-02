@@ -12,63 +12,7 @@
 			<el-menu-item index="2">即将到期</el-menu-item>
 			<el-menu-item index="3">已经到期</el-menu-item>
 		</el-menu>
-		<view class="selectBox">
-			<view class="selItem" v-for="(item,index) in 12" :key="index">
-				<view class="selTitle">关键字：</view>
-				<view class="selx" v-if="index ==0">
-					<el-input
-					  type="textarea"
-					  :rows="1"
-					  placeholder="关键词/域名每个一行"
-						 size="mini"
-					  v-model="form.textarea">
-					</el-input>
-					<el-checkbox-group class="group" v-model="form.checkList">
-						<el-checkbox label="1">开头</el-checkbox>
-						<el-checkbox label="2">结尾</el-checkbox>
-					</el-checkbox-group>
-				</view>
-				<view class="selx" v-if="index == 1">
-					<el-input
-					  placeholder="所有后缀"
-					  v-model="form.input"
-						 size="mini"
-					  :disabled="true">
-					</el-input>
-				</view>
-				<view class="selx" v-if="index == 2">
-					<el-input
-					  placeholder="所有后缀"
-					  v-model="form.input"
-						size="mini">
-					</el-input>
-				</view>
-				<view class="selx" v-if="index == 3">
-					<el-select size="mini" v-model="form.value" placeholder="请选择">
-						<el-option
-							v-for="item in options"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value">
-						</el-option>
-					</el-select>
-				</view>
-				<view class="selx" v-if="index ==4">
-					<el-date-picker
-						v-model="form.value1"
-						size="mini"
-						type="daterange"
-						range-separator="至"
-						start-placeholder="开始日期"
-						end-placeholder="结束日期">
-					</el-date-picker>
-				</view>
-			</view>
-		</view>
-		<view class="selBtn">
-			<el-button type="primary" @click="submitForm('ruleForm')">查找</el-button>
-			<el-button type="primary" @click="resetForm('ruleForm')" plain>重置</el-button>
-		</view>
+		<filtra-one></filtra-one>
 		<!-- list -->
 		<template>
 		  <el-table
@@ -80,25 +24,23 @@
 				<el-table-column prop="reg_time" label="注册时间" sortable></el-table-column>
 				<el-table-column prop="delete_date" label="到期时间" sortable></el-table-column>
 				<!-- <el-table-column prop="date4" label="注册商"></el-table-column> -->
-				<el-table-column label="分组" >
+				<!-- <el-table-column label="分组" >
 					<template slot-scope="scope">
 					  <span>{{scope.row.group.name ?scope.row.group.name:'未分组'}}</span>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 				
-				<!-- <el-table-column
+				<el-table-column
 					prop="group.name"
 					label="分组"
 					width="100"
-					:filters="groupList"
+					:filters="groupLi"
 					:filter-method="filterTag"
 					filter-placement="bottom-end">
 					<template slot-scope="scope">
-						<el-tag
-							:type="scope.row.group.name === 'sxc' ? 'primary' : 'success'"
-							disable-transitions>{{scope.row.group.name}}</el-tag>
+							{{scope.row.group.name ?scope.row.group.name:'未分组'}}
 					</template>
-				</el-table-column> -->
+				</el-table-column>
 				
 				
 				
@@ -156,10 +98,10 @@
 </template>
 
 <script>
-
+	import filtraOne from'./filtra_one.vue'
 	export default {
 		components: {
-			
+			filtraOne
 		},
 		data() {
 			return {
@@ -183,14 +125,14 @@
 					pagesize: 50 //条数
 				},
 				
-				groupList:[
-					{ text: 'sxc', value: 'sxc' }, 
-					{ text: '公司', value: '公司' }
+				groupLi:[
+					{ text: '未分组', value: null }, 
 				]
 			}
 		},
 		mounted() {
 			this.getList()
+			this.groupList()
 		},
 		methods: {
 			getList(){
@@ -203,6 +145,20 @@
 					if (res.code === 1) {
 						that.tableData = res.data.data
 						that.totalNum = res.data.total
+					}
+				});
+			},
+			groupList(){
+				let that = this;
+				that.$http('member.groupList').then(res => {
+					if (res.code === 1) {
+						// this.tableData = res.data
+						// this.groupLi
+						res.data.forEach(item=>{
+							let itm = { text: item.name, value: item.name };
+							that.groupLi.push(itm)
+						})
+						console.log(that.groupLi);
 					}
 				});
 			},
@@ -233,9 +189,8 @@
 					this.$refs.multipleTable.clearSelection();
 				}
 			},
-			filterTag(value, row) {
-				console.log(value, row);
-				return row.tag === value;
+			filterTag(value, row, column) {
+				return row.group.name === value;
 			},
 		}
 	}

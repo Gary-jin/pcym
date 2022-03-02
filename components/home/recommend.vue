@@ -24,7 +24,7 @@
 			</view>
 		</view> -->
 		<view class="f_cc_ls rmdbg3">
-			<ivew class='core advBox'>
+			<view class='core advBox'>
 				<view class="title">
 					此处应是大标题，内容甲方自己需提供
 				</view>
@@ -34,7 +34,7 @@
 					误删邮件轻松找回，邮件管理更安全、更放心
 				</view>
 				 <el-button class="titBtn" round>点击查看</el-button>
-			</ivew>
+			</view>
 			<view class="imgBox">
 				<image class="topPic" src="../../static/image/common/rgb3.png" mode="widthFix"></image>
 			</view>

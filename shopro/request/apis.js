@@ -152,6 +152,47 @@ export default {
 			method: "GET",
 			// desc: '我的域名',
 		},
+		identityList: {
+			url: "member_domains/identityList",
+			auth: true,
+			method: "GET",
+			// desc: '证件类型',
+		},
+		addMould: {
+			url: "member_domains/addMould",
+			auth: true,
+			method: "POST",
+			// desc: '创建模板',
+		},
+		mouldList: {
+			url: "member_domains/mouldList",
+			auth: true,
+			method: "GET",
+			// desc: '模板列表',
+		},
+
+
+	},
+
+	agent:{
+		applyAgent: {
+			url: "agent/applyAgent",
+			auth: true,
+			method: "POST",
+			// desc: '申请经纪人',
+		},
+		serviceFee: {
+			url: "agent/serviceFee",
+			auth: true,
+			method: "POST",
+			// desc: '服务费',
+		},
+		applyAgentLogs: {
+			url: "agent/applyAgentLogs",
+			auth: true,
+			method: "GET",
+			// desc: '服务费',
+		},
 
 	}
 

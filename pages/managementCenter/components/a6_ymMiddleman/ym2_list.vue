@@ -29,9 +29,16 @@
 					:data="tableData"
 					style="width: 100%;padding: 0 20px;"
 					max-height="250">
-					<el-table-column prop="date1" label="分组名称"></el-table-column>
-					<el-table-column prop="date2" label="域名数量"></el-table-column>
-					<el-table-column
+					<el-table-column prop="domains" label="域名"></el-table-column>
+					<el-table-column prop="createtime" label="发布时间" sortable></el-table-column>
+					<el-table-column prop="updatetime" label="最后更新时间" sortable></el-table-column>
+					<el-table-column label="状态">
+						<template slot-scope="scope">
+							{{statusList[scope.row.status]}}
+						</template>
+					</el-table-column>
+					
+					<!-- <el-table-column
 						label="操作"
 						width="120">
 						<template slot-scope="scope">
@@ -48,7 +55,7 @@
 								删除
 							</el-button>
 						</template>
-					</el-table-column>
+					</el-table-column> -->
 					
 				</el-table>
 			</template>
@@ -59,11 +66,11 @@
 					<el-pagination
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page="4"
-						:page-sizes="[100, 200, 300, 400]"
-						:page-size="100"
+						:current-page="pagin.page"
+						:page-sizes="[50, 100, 200]"
+						:page-size="pagin.pagesize"
 						layout="total, sizes, prev, pager, next, jumper"
-						:total="400">
+						:total="totalNum">
 					</el-pagination>
 				</view>
 			</view>	
@@ -84,17 +91,12 @@
 		},
 		data() {
 			return {
-				input:'',
-				tableData:[
-					{
-						date1:'分组1',
-						date2:'23'
-					},
-					{
-						date1:'分组2',
-						date2:'23'
-					}
-				],
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
+				},
+				tableData:[],
 				form: {
 					name: '',
 					region:''
@@ -102,18 +104,6 @@
 				options: [{
 					value: '选项1',
 					label: '黄金糕'
-				}, {
-					value: '选项2',
-					label: '双皮奶'
-				}, {
-					value: '选项3',
-					label: '蚵仔煎'
-				}, {
-					value: '选项4',
-					label: '龙须面'
-				}, {
-					value: '选项5',
-					label: '北京烤鸭'
 				}],
 				record:{//记录
 					region:'',
@@ -122,28 +112,29 @@
 				numLength: 0,
 				typeBtn:'warning',
 				checked:false,
-				
+				statusList:['待接单','确认中','谈判中','待支付','待交割','已取消','已关闭','已完成']
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			this.getList()
 		},
 		methods: {
-			handleSelect(e){
-				this.tabNum = e
+			getList(){
+				this.$http('agent.applyAgentLogs',{...this.pagin}).then(res => {
+					if(res.code == 1){
+						this.tableData = res.data.data
+						this.totalNum = res.data.total
+					}
+				});
 			},
-			onSubmit() {
-				console.log(this.checked);
-				console.log('submit!');
+			handleSizeChange(val) {
+				this.pagin.pagesize = val
+				this.getList()
 			},
-			changeRow(val){
-				this.numLength = this.$util.textareaLength(val);
-			},
+			handleCurrentChange(val) {
+				this.pagin.page = val
+				this.getList()
+			}
 		}
 	}
 </script>

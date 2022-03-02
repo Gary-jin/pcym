@@ -45,6 +45,7 @@
 
 <script>
 	import navConfig from '@/common/config/common/nav.config.js';
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			
@@ -64,25 +65,35 @@
 				...navConfig
 			}
 		},
-		onLoad(admin) {
-			
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		computed: {
+			...mapState({
+				isLogin: ({ user })  => user.isLogin,
+			})
 		},
 		methods: {
 			gopath(item){
-				uni.navigateTo({
-				    url: item.linkUrl
-				});
+				if(item.islogin){ //需要登录
+					if(this.isLogin){
+						uni.navigateTo({
+								url: item.linkUrl
+						});
+					} else{
+						this.$util.loginPopup()
+					}
+				} else{
+					uni.navigateTo({
+					    url: item.linkUrl
+					});
+				}
 			},
 			goAdmin(val){
-				uni.navigateTo({
-				    url: `/pages/managementCenter/index?tab=${val}`
-				});
+				if(this.isLogin){
+					uni.navigateTo({
+							url: `/pages/managementCenter/index?tab=${val}`
+					});				
+				} else{
+					this.$util.loginPopup()
+				}
 			}
 		}
 	}

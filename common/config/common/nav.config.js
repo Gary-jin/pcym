@@ -5,6 +5,7 @@ export default {
 			val:'home',
 			isEmpty: 0,
 			linkUrl:'/pages/index',
+			islogin:false,
 			list:[]
 		},
 		{
@@ -12,22 +13,27 @@ export default {
 			val:'nav1',
 			isEmpty: 1,
 			linkUrl:'/pages/nav1/n1_expire/index',
+			islogin:false,
 			list:[
 				{
 					name:'过期域名',
-					linkUrl:'/pages/nav1/n1_expire/index'
+					linkUrl:'/pages/nav1/n1_expire/index',
+					islogin:false
 				},
 				// {
 				// 	name:'域名预定',
-				// 	linkUrl:'/pages/nav1/n2_ymYd/index'
+				// 	linkUrl:'/pages/nav1/n2_ymYd/index',
+				// islogin:false
 				// },
 				{
 					name:'我的预定',
-					linkUrl:'/pages/managementCenter/index?tab=4-1'
+					linkUrl:'/pages/managementCenter/index?tab=4-1',
+					islogin:true
 				},
 				{
 					name:'竞价域名',
-					linkUrl:'/pages/nav1/n4_auction/index'
+					linkUrl:'/pages/nav1/n4_auction/index',
+					islogin:false
 				}
 			]
 		},
@@ -36,10 +42,12 @@ export default {
 			val:'nav2',
 			isEmpty: 1, 
 			linkUrl:'/pages/nav2/n1_hotWz/index',
+			islogin:false,
 			list:[
 				{
 					name:'热门网站',
-					linkUrl:'/pages/nav2/n1_hotWz/index'
+					linkUrl:'/pages/nav2/n1_hotWz/index',
+					islogin:false
 				}
 			]
 		},
@@ -48,10 +56,12 @@ export default {
 			val:'nav3',
 			isEmpty: 1, 
 			linkUrl:'/pages/nav3/n1_buy/index',
+			islogin:false,
 			list:[
 				{
 					name:'一口价',
-					linkUrl:'/pages/nav3/n1_buy/index'
+					linkUrl:'/pages/nav3/n1_buy/index',
+					islogin:false
 				}
 			]
 		},
@@ -60,10 +70,12 @@ export default {
 			val:'nav4',
 			isEmpty: 1, 
 			linkUrl:'/pages/nav4/n1_brand/index',
+			islogin:false,
 			list:[
 				{
 					name:'热门商标',
-					linkUrl:'/pages/nav4/n1_brand/index'
+					linkUrl:'/pages/nav4/n1_brand/index',
+					islogin:false
 				}
 			]
 		},
@@ -72,10 +84,12 @@ export default {
 			val:'nav5',
 			isEmpty: 1, 
 			linkUrl:'/pages/nav5/n1_mt/index',
+			islogin:false,
 			list:[
 				{
 					name:'热门新媒体',
-					linkUrl:'/pages/nav5/n1_mt/index'
+					linkUrl:'/pages/nav5/n1_mt/index',
+					islogin:false
 				}
 			]
 		}
