@@ -48,14 +48,23 @@
 				<view class="card">
 					<view class="t1"></view>
 					<view class="t2">
-						<el-button type="warning" size="mini">立即购买</el-button>
+						<el-button @click="buy()" type="warning" size="mini">立即购买</el-button>
 						<text class="x1">可用余额：</text>
-						<text class="x2">￥0.00</text>
+						<text class="x2">￥{{userInfo.money}}</text>
 						<text class="x3">充值</text>
 					</view>
 				</view>
 			</view>
 		</view>
+		
+		<qj-dialog :hidden="hidden" :title="'域名：'+goodsDetail.domain" :hideFooter="false" :width="400" :height="150"
+		 @close="closeDialog" @cancel="closeDialog"  @confirm="submit">
+			<view class="popupBox">
+				<view class="tit1">出售价格：￥{{goodsDetail.price}}</view>
+				<view class="tit1">可用余额：<text style="color: #007AFF;">￥{{userInfo.money}}</text></view>
+				<view class="tit1">您确定要购买吗？</view>
+			</view>
+		</qj-dialog>
 		
 	</view>
 </template>
@@ -81,6 +90,7 @@
 				code:'',
 				checked:true,
 				goodsDetail:{},
+				hidden:false
 			}
 		},
 		mounted() {
@@ -99,7 +109,16 @@
 			},
 			toggleSelection(val){
 				console.log(val);
-			}
+			},
+			buy(){
+				this.hidden = true;
+			},
+			closeDialog() {
+				this.hidden = false
+			},
+			submit() {
+				this.hidden = false
+			},
 
 		}
 	}
@@ -149,6 +168,13 @@
 			.t22{
 				color: #FE2626;
 			}
+		}
+	}
+	
+	.popupBox{
+		padding: 20px;
+		.tit1{
+			padding: 10px 0;
 		}
 	}
 </style>

@@ -1,11 +1,11 @@
 <template>
-	<view class="dialog-wrapper" v-if="!hidden">
+	<view class="dialog-wrapper" v-if="hidden">
 		<view :class="['dialog-wrap', {'radius': borderRadius}, {'willclose': willclose}, {'goup': buttonReverse}]" :style="{'width': width + 'px'}">
 
 			<view :class="['box-header', {'hidden': !showHeaderBg}]">
 				<view class="title">{{title}}</view>
 				<view class="btn-close" v-if="showCloseBtn" @click="closeDialog">
-					<i class="icon i-close"></i>
+					<i class="icon el-icon-close"></i>
 				</view>
 			</view>
 			<view class="box-body" :style="{'height': height + 'px'}">
@@ -24,7 +24,10 @@
 <script>
 	export default {
 		props: {
-			hidden: true,
+			hidden: {
+				type: Boolean,
+				default: true
+			},
 			title: String,
 			width: {
 				type: Number,
@@ -100,13 +103,14 @@
 		bottom: 0;
 		@extend %flex-align-center;
 		justify-content: center;
-
+		
 		.dialog-wrap {
 			background-color: #fff;
 			border-radius: 2px;
 			overflow: hidden;
 			animation: dialog-open .3s forwards;
-			
+			border-radius: 5px;
+			overflow: hidden;
 			&.radius {
 				border-radius: 5px;
 			}

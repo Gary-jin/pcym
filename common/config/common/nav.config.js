@@ -224,6 +224,11 @@ export default {
 					name:'外部域名入库',
 					itemVal:'5-6',
 					linkUrl:''
+				},
+				{
+					name:'域名过户',
+					itemVal:'5-8',
+					linkUrl:''
 				}
 			]
 		},

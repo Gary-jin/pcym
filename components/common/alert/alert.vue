@@ -1,9 +1,9 @@
 <template>
-	<zw-dialog :hidden="hidden" :width="500" :height="100" :showHeaderBg="false" :hideFooter="false" :showFooterBg="false"
+	<qj-dialog :hidden="hidden" :width="500" :height="100" :showHeaderBg="false" :hideFooter="false" :showFooterBg="false"
 	 :showCancel="showCancel" :confirmText="confirmText" :cancelText="cancelText"
 	 :buttonReverse="true" :showCloseBtn="false" @close="hidden = true;" @confirm="handleAction('confirm')" @cancel="handleAction('cancel')">
 		<view class="message">{{message}}</view>
-	</zw-dialog>
+	</qj-dialog>
 </template>
 
 <script>
