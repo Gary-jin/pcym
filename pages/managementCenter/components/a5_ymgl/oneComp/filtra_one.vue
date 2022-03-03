@@ -27,30 +27,31 @@
 					</el-form-item>
 					<view class="f_bc itemBox">
 						<el-form-item label="分组" prop="">
-							<el-select v-model="ruleForm.group_id" placeholder="请选择">
+							<el-select v-model="ruleForm.group_id" placeholder="请选择" size="small">
 								<el-option v-for="(item,index) in groupList" :label="item.name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="状态" prop="">
-							<el-select v-model="ruleForm.status_id" placeholder="请选择">
+							<el-select v-model="ruleForm.status_id" placeholder="请选择" size="small">
 								<el-option v-for="(item,index) in statusList" :label="item.val" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>						
 					</view>
 					<view class="f_bc itemBox">
 						<el-form-item label="模板" prop="">
-							<el-select v-model="ruleForm.mould_id" placeholder="请选择">
+							<el-select v-model="ruleForm.mould_id" placeholder="请选择" size="small">
 								<el-option v-for="(item,index) in mouldList" :label="item.mould_name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="DNS" prop="">
-							<el-input v-model="ruleForm.DNS_key" placeholder="请输入内容"></el-input>
+							<el-input v-model="ruleForm.DNS_key" placeholder="请输入内容" size="small"></el-input>
 						</el-form-item>
 					</view>
 					
 					<el-form-item label="注册时间" prop="">
 						<el-date-picker
 							v-model="ruleForm.value1"
+							size="small"
 							type="daterange"
 							value-format="yyyy-M-d"
 							range-separator="至"
@@ -61,6 +62,7 @@
 					<el-form-item label="到期时间" prop="">
 						<el-date-picker
 							v-model="ruleForm.value1"
+							size="small"
 							type="daterange"
 							value-format="yyyy-M-d"
 							range-separator="至"

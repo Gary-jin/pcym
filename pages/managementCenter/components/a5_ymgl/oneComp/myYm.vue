@@ -23,14 +23,14 @@
 				<el-table-column prop="delete_date" label="到期时间" sortable></el-table-column>
 				
 				<el-table-column
-					prop=""
+					prop="group.name"
 					label="分组"
 					width="100"
 					:filters="groupLi"
 					:filter-method="filterTag"
 					filter-placement="bottom-end">
 					<template slot-scope="scope">
-							{{scope.row.group ?scope.row.group.name:'未分组'}}
+							{{scope.row.group.name ?scope.row.group.name:'未分组'}}
 					</template>
 				</el-table-column>
 				
@@ -93,7 +93,7 @@
 				},
 				
 				groupLi:[
-					{ text: '未分组', value: '' }, 
+					{ text: '未分组', value: null }, 
 				]
 			}
 		},
