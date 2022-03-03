@@ -77,7 +77,7 @@
 					</el-form-item>
 					<el-form-item label="请选择模板" prop="mould_id">
 						<el-select v-model="form.mould_id" placeholder="请选择">
-							<el-option v-for="(item,index) in mouldList" :label="item.mould_name" :value="item.id"></el-option>
+							<el-option v-for="(item,index) in mouldList" :key="index" :label="item.mould_name" :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>

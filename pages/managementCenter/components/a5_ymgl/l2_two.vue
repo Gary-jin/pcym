@@ -77,7 +77,7 @@
 					</el-form-item>
 					<el-form-item label="分组" prop="group_id">
 						<el-select v-model="form.group_id" placeholder="请选择">
-							<el-option v-for="(item,index) in tableData" :label="item.name" :value="item.id"></el-option>
+							<el-option v-for="(item,index) in tableData" :key="index" :label="item.name" :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>

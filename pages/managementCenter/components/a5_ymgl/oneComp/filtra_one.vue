@@ -28,19 +28,19 @@
 					<view class="f_bc itemBox">
 						<el-form-item label="分组" prop="">
 							<el-select v-model="ruleForm.group_id" placeholder="请选择" size="small">
-								<el-option v-for="(item,index) in groupList" :label="item.name" :value="item.id"></el-option>
+								<el-option v-for="(item,index) in groupList" :key="index" :label="item.name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="状态" prop="">
 							<el-select v-model="ruleForm.status_id" placeholder="请选择" size="small">
-								<el-option v-for="(item,index) in statusList" :label="item.val" :value="item.id"></el-option>
+								<el-option v-for="(item,index) in statusList" :key="index" :label="item.val" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>						
 					</view>
 					<view class="f_bc itemBox">
 						<el-form-item label="模板" prop="">
 							<el-select v-model="ruleForm.mould_id" placeholder="请选择" size="small">
-								<el-option v-for="(item,index) in mouldList" :label="item.mould_name" :value="item.id"></el-option>
+								<el-option v-for="(item,index) in mouldList" :key="index" :label="item.mould_name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="DNS" prop="">
