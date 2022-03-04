@@ -22,7 +22,8 @@
 		},
 		data() {
 			return {
-				typeNum:''
+				typeNum:'',
+				option:{}, //所有数据
 			}
 		},
 		onLoad(option) {
@@ -36,7 +37,6 @@
 		},
 		methods: {
 			typeTab(e){
-				console.log(e);
 				this.typeNum = e.itemVal
 			}
 		}

@@ -14,13 +14,16 @@
 		<el-form ref="form" label-width="180px">
 		  <el-form-item label="域名">
 		    {{parameter.domain}}
-				<text class="texName">域名证书</text>
+				<!-- <text class="texName">域名证书</text> -->
+				<a class="texName" target="_blank" href="https://cpp.cnnic.cn/certificate/certificateCnnic!searchCert.action?decorator=false">
+					域名证书
+				</a>
 		  </el-form-item>
 			<el-form-item label="状态">
 				 <span v-if="parameter.status==1">正常</span>
 				 <span v-if="parameter.status==2">正在出售</span>
 				 <span v-if="parameter.status==3">转出中</span>
-				<text class="texName">查看whois</text>
+				<!-- <text class="texName">查看whois</text> -->
 			</el-form-item>
 			<!-- <el-form-item label="注册商">
 			  易名 
@@ -29,27 +32,25 @@
 			</el-form-item> -->
 			<el-form-item label="持有者名称">
 			  域名临时持有人
-				<text class="texName">白名单 </text>
-				<text class="texName">域名过户 </text>
+				<!-- <text class="texName">白名单 </text> -->
+				<!-- <text class="texName">域名过户 </text> -->
 			</el-form-item>
-			<el-form-item label="邮箱">
+			<!-- <el-form-item label="邮箱">
 			  临时邮箱  
-			</el-form-item>
+			</el-form-item> -->
 			<el-form-item label="注册时间">
-			  2021-06-27 12:02:35
+			  {{parameter.reg_time}}
 				<text @click="goPath('3',parameter)" class="texName">续费</text>
 			</el-form-item>
 			<el-form-item label="到期时间">
-			  2021-06-27 12:02:35
+			 {{parameter.delete_date}}
 			</el-form-item>
 			<el-form-item label="DNS">
 			  <view class="d_f_c">
 			  	<view class="">
-						<view class="">hm1.alidns.com</view>
-						<view class="">hm1.alidns.com</view>
-						<view class="">hm1.alidns.com</view>
+						<view class="">{{parameter.dns}}</view>
 					</view>
-					<text class="texName">修改</text>
+					<text @click="changeDns()" class="texName">修改</text>
 			  </view>
 			</el-form-item>
 			<el-form-item>
@@ -62,7 +63,7 @@
 </template>
 
 <script>
-
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {},
 		props: {
@@ -80,14 +81,20 @@
 			console.log(this.parameter);
 		},
 		methods: {
+			...mapActions(['setdomainList']),
 			goPath(val,item){
 				let option ={
 					tabVal:val,
 					item: item
 				}
 				this.$emit('changeTal',option)
-			}
-		}
+			},
+			changeDns(){
+				this.setdomainList(this.parameter)
+				uni.$emit('upTypeTab',{itemVal:'5-9'})
+			},
+			
+		},
 	}
 </script>
 <style lang="scss" scoped>

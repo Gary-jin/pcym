@@ -2,12 +2,13 @@
 	<view class="rightBox resRight">
 		<view class="">
 			<el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
-				<el-tab-pane label="单个预订" name="first">
+				<!-- 单个预订 -->
+				<el-tab-pane label="预订" name="first">
 					<tab-pane1 :goodsId="goodsId"></tab-pane1>
 				</el-tab-pane>
-				<el-tab-pane label="批量预订" name="second">
+				<!-- <el-tab-pane label="批量预订" name="second">
 					<tab-pane2></tab-pane2>
-				</el-tab-pane>
+				</el-tab-pane> -->
 				<el-tab-pane label="预订提醒" name="third">
 					<tab-pane3></tab-pane3>
 				</el-tab-pane>

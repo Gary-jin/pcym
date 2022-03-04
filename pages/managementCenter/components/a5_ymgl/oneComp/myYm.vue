@@ -49,7 +49,7 @@
 		      <template slot-scope="scope">
 		        <text class="xtext" @click="goPath('2',scope.row)">管理</text>
 						<text class="xtext" @click="goPath('3',scope.row)">续费</text>
-						<text class="xtext">解析</text>
+						<text class="xtext" @click="changeDns(scope.row)">修改</text>
 		      </template>
 		    </el-table-column>
 				
@@ -74,7 +74,8 @@
 </template>
 
 <script>
-	import filtraOne from'./filtra_one.vue'
+	import filtraOne from'./filtra_one.vue';
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			filtraOne
@@ -102,6 +103,7 @@
 			this.groupList()
 		},
 		methods: {
+			...mapActions(['setdomainList']),
 			submitForm(e) {
 				this.form = e
 				this.getList()
@@ -154,7 +156,11 @@
 					item: item
 				}
 				this.$emit('changeTal',option)
-			}
+			},
+			changeDns(item){
+				this.setdomainList(item)
+				uni.$emit('upTypeTab',{itemVal:'5-9'})
+			},
 		}
 	}
 </script>

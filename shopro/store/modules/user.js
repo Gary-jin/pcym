@@ -6,12 +6,16 @@ const state = {
 	token: uni.getStorageSync("token") || "",
 	isLogin: uni.getStorageSync("isLogin") || false, // 是否登陆
 	userInfo: uni.getStorageSync("userInfo") || {}, // 用户信息
+	filtraList: uni.getStorageSync("filtraList") || {}, //筛选选项
+	domainList:{}, //域名
 }
 
 const getters = {
 	token: state => state.token,
 	isLogin: state => state.isLogin,
 	userInfo: state => state.userInfo,
+	filtraList: state => state.filtraList,
+	domainList: state => state.domainList,
 }
 
 const actions = {
@@ -32,7 +36,8 @@ const actions = {
 					}
 
 				}).then(() => {
-					// 只有在登录的时候请求购物车信息，订单信息，获取登录信息之后。
+					// 只有在登录的时候请求。
+					store.dispatch('getFiltraList');
 				})
 				.catch(e => {
 					reject(e)
@@ -70,8 +75,29 @@ const actions = {
 			// })
 		})
 	},
-
-
+	//获取筛选选项
+	getFiltraList({
+		commit
+	}) {
+		return new Promise((resolve, reject) => {
+			http('ym.filtrate').then(res => {
+				if(res.code === 1){
+					commit('filtraList', res.data);
+					resolve(res)
+				}
+			}).catch(e => {
+					reject(e)
+			})
+		})
+	},
+		//存域名信息
+	setdomainList({
+		commit
+	},data) {
+		return new Promise((resolve, reject) => {
+			commit('domainList', data);
+		})
+	},
 
 
 	// 自动登录
@@ -132,6 +158,15 @@ const mutations = {
 	userInfo(state, data) {
 		state.userInfo = data;
 		uni.setStorageSync("userInfo", data);
+	},
+	// 筛选信息
+	filtraList(state, data) {
+		state.filtraList = data;
+		uni.setStorageSync("filtraList", data);
+	},
+	//域名
+	domainList(state, data) {
+		state.domainList = data;
 	},
 }
 

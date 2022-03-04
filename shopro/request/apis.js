@@ -79,6 +79,12 @@ export default {
 			method: "GET",
 			// desc: '  竞价域名详情',
 		},
+		domainBidding: {
+			url: "domains_bidding/bidding",
+			auth: true,
+			method: "POST",
+			// desc: '  竞价出价',
+		},
 		
 
 		ydhot: {
@@ -104,6 +110,12 @@ export default {
 			auth: true,
 			method: "GET",
 			// desc: '预定通道',
+		},
+		bookDomain: {
+			url: "expires/bookDomain",
+			auth: true,
+			method: "POST",
+			// desc: ' 域名预定',
 		},
 
 
@@ -170,7 +182,18 @@ export default {
 			method: "GET",
 			// desc: '模板列表',
 		},
-
+		updateDns: {
+			url: "member_domains/updateDns",
+			auth: true,
+			method: "POST",
+			// desc: '修改dns ',
+		},
+		updateDnsLog: {
+			url: "member_domains/updateDnsLog",
+			auth: true,
+			method: "GET",
+			// desc: ' dns修改记录 ',
+		},
 
 	},
 
@@ -192,6 +215,27 @@ export default {
 			auth: true,
 			method: "GET",
 			// desc: '服务费',
+		},
+
+	},
+	order:{
+		domainRecharge: {
+			url: "order/domainRecharge",
+			auth: true,
+			method: "POST",
+			// desc: '域名续费 提交订单',
+		},
+		walletPay: {
+			url: "pay/walletPay",
+			auth: true,
+			method: "GET",
+			// desc: '域名续费 确定续费',
+		},
+		domainOrder: {
+			url: "order/domainOrder",
+			auth: true,
+			method: "POST",
+			// desc: '一口价购买',
 		},
 
 	}

@@ -31,10 +31,10 @@
 					<view class="txt1">当前领先</view>
 					<view class="txt2">-</view>
 				</view>
-				<view class="cText">
+				<!-- <view class="cText">
 					<view class="txt1">出价次数</view>
 					<view class="txt2">￥{{goodsDetail.next_bid}}</view>
-				</view>
+				</view> -->
 			</view>
 			<!--  -->
 			<view class="cBox2">
@@ -70,10 +70,10 @@
 				<view class="rowBox">
 					<view class="rLeft">本次出价（￥）：</view>
 					<view class="rRight rRightc">
-						<el-input v-model="goodsDetail.next_bid" style="width: 70px;"></el-input>
+						<el-input :min="goodsDetail.next_bid" v-model="nextPrice" type="number" style="width: 170px;"></el-input>
 						<text class="rRtt">（将冻结￥100作为保证金）</text>
-						<el-button type="primary">闯入竞价</el-button>
-						<el-button type="primary" plain>刷   新</el-button>
+						<el-button @click="bidding()" type="primary">闯入竞价</el-button>
+						<el-button @click="refPage()" type="primary" plain>刷   新</el-button>
 					</view>
 				</view>
 			</view>
@@ -141,6 +141,7 @@
 						date5: '',
 					}
 				],
+				nextPrice:''
 			}
 		},
 		mounted() {
@@ -154,10 +155,26 @@
 				}).then(res => {
 					if (res.code === 1) {
 						that.goodsDetail = res.data 
+						that.nextPrice = res.data.next_bid 
 					}
 				});
 			},
-
+			bidding(){
+				let that = this;
+				that.$http('ym.domainBidding', {
+					domain: that.goodsDetail.domain,
+					bidding_id: that.goodsDetail.id,
+					bid_price: that.nextPrice,
+				}).then(res => {
+					if (res.code === 1) {
+						
+					}
+					this.$util.showErrorMsg(res.msg);
+				});
+			},
+			refPage(){
+				location.reload()
+			}
 		}
 	}
 </script>
@@ -210,7 +227,8 @@
 			border: none;
 		}
 		.cText{
-			width: 25%;
+			// width: 25%;
+			width: 33%;
 			border-right: 1px #E6E6E6 solid;
 			text-align: center;
 			.txt1{

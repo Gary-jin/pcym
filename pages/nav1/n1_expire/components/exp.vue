@@ -5,8 +5,8 @@
 		<view class="core expCore">
 			<template>
 			  <el-table ref="multipleTable" :data="list" style="width: 100%" >
-					<el-table-column type="selection" width="55"></el-table-column>
-			    <el-table-column prop="domain" label="域名"></el-table-column>
+					<!-- <el-table-column type="selection" width="55"></el-table-column> -->
+			    <el-table-column prop="domain" label="域名" align="center"></el-table-column>
 					<el-table-column prop="desc" label="简介"></el-table-column>
 					<!-- <el-table-column prop="date" label="查询"></el-table-column> -->
 					<el-table-column prop="type" label="类型"></el-table-column>
@@ -33,13 +33,13 @@
 		<view class="core">
 			<view class="pagBox">
 				<view class="pagL">
-					 <el-checkbox @change="toggleSelection(checked)" v-model="checked">全选</el-checkbox>
+					 <!-- <el-checkbox @change="toggleSelection(checked)" v-model="checked">全选</el-checkbox>
 					 <el-button
 					   @click="derive"
 						 class="btn"
 					   type="primary">
 					   批量导出
-					 </el-button>
+					 </el-button> -->
 				</view>
 				<view class="pagR">
 					<el-pagination

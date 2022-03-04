@@ -18,9 +18,13 @@
 				</view> -->
 				<view class="card">
 					<view class="t1">域名有效期：</view>
-					<view class="t2">{{goodsDetail.desc}}</view>
+					<view class="t2">
+						{{$util.dateFormat('YYYY-mm-dd', goodsDetail.reg_time)}}
+						至
+						{{goodsDetail.delete_date}}
+					</view>
 				</view>
-				<view class="card">
+				<!-- <view class="card">
 					<view class="t1">
 						<el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="top">
 							<i class="el-icon-warning-outline"></i>
@@ -31,27 +35,28 @@
 						<text class="pho">{{userInfo.mobile}}</text>
 						<el-button type="primary" :loading="true" plain size="mini">获取验证码</el-button>
 					</view>
-				</view>
-				<view class="card">
+				</view> -->
+				<!-- <view class="card">
 					<view class="t1">验证码：</view>
 					<view class="t2" style="width: 150px;">
 						<el-input v-model="code" size="mini" placeholder="请输入验证码"></el-input>
 					</view>
-				</view> 
-				<view class="card">
+				</view> -->
+				<!-- <view class="card">
 					<view class="t1"></view>
 					<view class="t2">
 						<el-checkbox @change="toggleSelection(checked)" v-model="checked"></el-checkbox>
 						<text>勾选后，在60分钟内相同业务类型，不需要再次验证。</text>
 					</view>
-				</view>
+				</view> -->
 				<view class="card">
 					<view class="t1"></view>
 					<view class="t2">
 						<el-button @click="buy()" type="warning" size="mini">立即购买</el-button>
 						<text class="x1">可用余额：</text>
 						<text class="x2">￥{{userInfo.money}}</text>
-						<text class="x3">充值</text>
+						<!-- <text class="x3">充值</text> -->
+						<navigator class="x3" :url="`/pages/managementCenter/index?tab=3-1`">充值</navigator>
 					</view>
 				</view>
 			</view>
@@ -77,7 +82,8 @@
 		props: {
 			goodsId: {
 				type: String,
-				default: ''
+				default: '',
+				orderId:''
 			},
 		},
 		computed: {
@@ -97,6 +103,7 @@
 			this.getDetail()
 		},
 		methods: {
+				...mapActions(['getUserInfo']),
 			getDetail(){
 				let that = this;
 				that.$http('ym.ykjDetail', {
@@ -111,13 +118,31 @@
 				console.log(val);
 			},
 			buy(){
-				this.hidden = true;
+				let that = this;
+				that.$http('order.domainOrder', {
+					domain: that.goodsDetail.domain
+				}).then(res => {
+					if (res.code === 1) {
+						that.hidden = true;
+						that.orderId = res.data
+					}
+				});
+				
 			},
 			closeDialog() {
 				this.hidden = false
 			},
 			submit() {
-				this.hidden = false
+				let that = this;
+				that.$http('order.walletPay', {
+					id: that.orderId
+				}).then(res => {
+					if (res.code === 1) {
+						this.getUserInfo()
+						that.hidden = false;
+					}
+					this.$util.showErrorMsg(res.msg);
+				});
 			},
 
 		}
@@ -154,6 +179,8 @@
 			}
 			.t2{
 				width: 75%;
+				display: flex;
+				align-items: center;
 				.pho{
 					margin-right: 30px;
 				}

@@ -10,7 +10,7 @@
 						</el-radio-group>
 					</el-form-item>
 					<view class="f_bc itemBox">
-						<el-form-item label="关键字" prop="">
+						<el-form-item label="关键字" prop="key_match">
 							<view class="itemCore">
 								<el-input @input="changeRow(textVal)" v-model="textVal" type="textarea" class="mr" :rows="1" size="small" placeholder="关键词/域名每个一行"></el-input>
 								<el-checkbox-group v-model="ruleForm.key_match">
@@ -19,7 +19,7 @@
 								</el-checkbox-group>								
 							</view>
 						</el-form-item>
-						<el-form-item label="排除" prop="">
+						<el-form-item label="排除" prop="besides_match">
 							<view class="itemCore">
 								<el-input v-model="ruleForm.besides" class="mr"  size="small" placeholder=""></el-input>
 								<el-checkbox-group v-model="ruleForm.besides_match">
@@ -38,14 +38,14 @@
 						</view>
 					</el-form-item>
 					<view class="f_bc itemBox">
-						<el-form-item label="长度" prop="">
+						<el-form-item label="长度范围" prop="" >
 							<view class="itemCore">
 								<el-input v-model="ruleForm.min_length" type="number" min="0" size="small" placeholder=""></el-input>
 								<i class="el-icon-minus"></i>
 								<el-input v-model="ruleForm.max_length" type="number" min="0" size="small" placeholder=""></el-input>
 							</view>
 						</el-form-item>
-						<el-form-item label="注册日期" prop="">
+						<el-form-item label="注册日期" prop="reg_time">
 							<el-select v-model="ruleForm.reg_time" placeholder="不限" size="small">
 								<el-option :label="''" :value="''">不限</el-option>
 								<el-option
@@ -92,15 +92,15 @@
 </template>
 
 <script>
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			
 		},
-		props: {
-			// navVal: {
-			// 	type: String,
-			// 	default: 'home'
-			// },
+		computed: {
+			...mapState({
+				filtraList: ({ user }) => user.filtraList,
+			})
 		},
 		data() {
 			return {
@@ -120,23 +120,13 @@
 				textVal:'',
 				checkedType:true,
 				checkedSuffix:true,
-				filtraList:[],
 			}
 		},
 		mounted() {
-			this.getfiltrate()
 		},
 		methods: {
 			changeRow(val){
 				this.ruleForm.key = this.$util.textareaList(val);
-			},
-			getfiltrate() {
-				let that = this;
-				that.$http('ym.filtrate', '').then(res => {
-					if (res.code === 1) {
-						this.filtraList = res.data
-					}
-				});
 			},
 			submitForm(){
 				console.log(this.ruleForm);
@@ -144,7 +134,13 @@
 			},
 			resetForm(){
 				this.$refs['ruleForm'].resetFields();
-				this.textVal = ''
+				this.textVal = '';
+				this.ruleForm.key = '';
+				this.checkedType = true ;
+				this.checkedSuffix = true ;
+				this.ruleForm.besides = '';
+				this.ruleForm.min_length = '';
+				this.ruleForm.max_length = ''
 			},
 			togType1(val){
 				if(val){

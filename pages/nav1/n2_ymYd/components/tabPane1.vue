@@ -78,13 +78,13 @@
 			* CN高速通道由于包含多个抢注商，建议尽量在22:30之前预订，否则无法保证在所有抢注商处均能成功提交预订。
 		</view>
 		<view class="agreementBox">
-			<el-checkbox @change="toggleSelection(checked)" v-model="agreement"></el-checkbox>
+			<el-checkbox v-model="checked"></el-checkbox>
 			<view class="agreement">
 				我已阅读并同意<text>《域名预订竞价服务协议》</text>
 			</view>
 		</view>
 		<view class="btnBox">
-			<el-button type="primary">确认预定</el-button>
+			<el-button @click="reserveDomain(checked)" type="primary">确认预定</el-button>
 		</view>
 	</view>
 </template>
@@ -101,10 +101,11 @@
 		},
 		data() {
 			return {
-				agreement:true,
+				checked:true,
 				tableData: [],
 				
 				goodsDetail:{},
+				domainItem:{}
 			}
 		},
 		mounted() {
@@ -133,8 +134,29 @@
 					}
 				});
 			},
+			toggleSelection(val){
+				this.checked = val
+			},
 			handleCurrentChange(val) {
 				console.log(val);
+				this.domainItem = val
+			},
+			reserveDomain(val){
+				let that = this;
+				if(val){
+					if(!this.domainItem.number){
+						this.$util.showErrorMsg('请先选择通道');
+						return
+					}
+					that.$http('ym.bookDomain', {
+						domain: this.goodsDetail.domain,
+						channel: this.domainItem.number
+					}).then(res => {
+							this.$util.showErrorMsg(res.msg);
+					});
+				} else{
+					this.$util.showErrorMsg('请先同意《域名预订竞价服务协议》');
+				}
 			}
 		}
 	}

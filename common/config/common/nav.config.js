@@ -229,6 +229,11 @@ export default {
 					name:'域名过户',
 					itemVal:'5-8',
 					linkUrl:''
+				},
+				{
+					name:'修改DNS',
+					itemVal:'5-9',
+					linkUrl:''
 				}
 			]
 		},

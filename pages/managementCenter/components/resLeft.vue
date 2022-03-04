@@ -23,6 +23,7 @@
 
 <script>
 	import navConfig from '@/common/config/common/nav.config.js';
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			
@@ -38,17 +39,17 @@
 				...navConfig
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
-			
+		mounted() {
+			let that = this;
+			uni.$on('upTypeTab',function(data){
+				that.$emit('typeTab',data)
+			})
 		},
 		methods: {
+			...mapActions(['setdomainList']),
 			handleOpen(item) {
 				this.$emit('typeTab',item)
+				this.setdomainList({})
 			},
 		}
 	}

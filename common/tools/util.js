@@ -60,7 +60,7 @@ export default {
 		return str.length;
 	},
 	/**
-	 * 转换多行输入
+	 * 转换textarea多行输入
 	 */
 	 textareaList(val){
 		let list = val.split(/\r?\n|\r/);
@@ -72,8 +72,41 @@ export default {
 		})
 		return str;
 	},
+	textareaString(val){
+		let list = val.split(/\r?\n|\r/);
+		let str = ''
+		list.forEach((item,index)=>{
+			if(item){
+				let x= index == list.length -1  ? '':','
+				str += item + x
+			}
+		})
+		return str;
+	},
+	// 年月日，时分秒
+	// "YYYY-mm-dd HH:MM"
+	dateFormat(fmt, timestamp) {
+		let ret;
+		let date = new Date(timestamp * 1000)
+		const opt = {
+			"Y+": date.getFullYear().toString(), // 年
+			"m+": (date.getMonth() + 1).toString(), // 月
+			"d+": date.getDate().toString(), // 日
+			"H+": date.getHours().toString(), // 时
+			"M+": date.getMinutes().toString(), // 分
+			"S+": date.getSeconds().toString() // 秒
+			// 有其他格式化字符需求可以继续添加，必须转化成字符串
+		};
+		for (let k in opt) {
+			ret = new RegExp("(" + k + ")").exec(fmt);
+			if (ret) {
+				fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+			};
+		};
+		return fmt;
+	},
 	/**
-	 * 
+	 * 路径来源
 	 */
 	formPath(val){
 		let route = '/'+(getCurrentPages()[getCurrentPages().length - 1]).route

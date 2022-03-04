@@ -8,7 +8,7 @@
 							<el-radio :label="item.type" v-for="(item,index) in filtraList.fast" :key="index">{{item.name}}</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="关键字" prop="">
+					<el-form-item label="关键字" prop="key_match">
 						<view class="itemCore">
 							<el-input @input="changeRow(textVal)" v-model="textVal" type="textarea" class="mr" :rows="1" size="small" placeholder="关键词/域名每个一行"></el-input>
 							<el-checkbox-group v-model="ruleForm.key_match">
@@ -26,31 +26,31 @@
 						</view>
 					</el-form-item>
 					<view class="f_bc itemBox">
-						<el-form-item label="分组" prop="">
+						<el-form-item label="分组" prop="group_id">
 							<el-select v-model="ruleForm.group_id" placeholder="请选择" size="small">
 								<el-option v-for="(item,index) in groupList" :key="index" :label="item.name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="状态" prop="">
-							<el-select v-model="ruleForm.status_id" placeholder="请选择" size="small">
+						<el-form-item label="状态" prop="status">
+							<el-select v-model="ruleForm.status" placeholder="请选择" size="small">
 								<el-option v-for="(item,index) in statusList" :key="index" :label="item.val" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>						
 					</view>
 					<view class="f_bc itemBox">
-						<el-form-item label="模板" prop="">
+						<el-form-item label="模板" prop="mould_id">
 							<el-select v-model="ruleForm.mould_id" placeholder="请选择" size="small">
 								<el-option v-for="(item,index) in mouldList" :key="index" :label="item.mould_name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="DNS" prop="">
-							<el-input v-model="ruleForm.DNS_key" placeholder="请输入内容" size="small"></el-input>
+						<el-form-item label="DNS" prop="dns">
+							<el-input v-model="ruleForm.dns" placeholder="请输入内容" size="small"></el-input>
 						</el-form-item>
 					</view>
 					
-					<el-form-item label="注册时间" prop="">
+					<el-form-item label="注册时间"  prop="reg_time">
 						<el-date-picker
-							v-model="ruleForm.value1"
+							v-model="ruleForm.reg_time"
 							size="small"
 							type="daterange"
 							value-format="yyyy-M-d"
@@ -59,9 +59,9 @@
 							end-placeholder="结束日期">
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="到期时间" prop="">
+					<el-form-item label="到期时间" prop="expire_time">
 						<el-date-picker
-							v-model="ruleForm.value1"
+							v-model="ruleForm.expire_time"
 							size="small"
 							type="daterange"
 							value-format="yyyy-M-d"
@@ -83,8 +83,8 @@
 						<!-- 注意：数据只做参考，不保证数据完全准确。 -->
 					</view>
 					<view class="footerBtn">
-						<el-button type="primary" @click="submitForm()">查找</el-button>
-						<el-button @click="resetForm()">重置</el-button>						
+						<el-button type="primary" @click="submitForm('ruleForm')">查找</el-button>
+						<el-button @click="resetForm('ruleForm')">重置</el-button>						
 					</view>
 				</view>
 			<!--  -->
@@ -94,15 +94,15 @@
 </template>
 
 <script>
+	import {mapMutations,mapActions,mapState} from 'vuex';
 	export default {
 		components: {
 			
 		},
-		props: {
-			// navVal: {
-			// 	type: String,
-			// 	default: 'home'
-			// },
+		computed: {
+			...mapState({
+				filtraList: ({ user }) => user.filtraList,
+			})
 		},
 		data() {
 			return {
@@ -120,15 +120,16 @@
 					// expire_time:'', //删除日期
 					
 					group_id:'', //分组
-					status_id:'',//状态
+					status:'',//状态
 					mould_id:'', //模板
-					DNS_key:'', //Dns
-					value1:[]
+					dns:'', //Dns
+					expire_time:[], //过期时间
+					reg_time:[], //注册时间
+					
 				},
 				textVal:'',
 				checkedType:true,
 				checkedSuffix:true,
-				filtraList:[],
 				groupList:[], //分组
 				mouldList:[], //模板
 				statusList:[  //状态
@@ -142,7 +143,6 @@
 			}
 		},
 		mounted() {
-			this.getfiltrate()
 			this.getgroupList()
 			this.getMouldList()
 		},
@@ -150,21 +150,15 @@
 			changeRow(val){
 				this.ruleForm.key = this.$util.textareaList(val);
 			},
-			getfiltrate() {
-				let that = this;
-				that.$http('ym.filtrate', '').then(res => {
-					if (res.code === 1) {
-						this.filtraList = res.data
-					}
-				});
-			},
-			submitForm(){
+			submitForm(ruleForm){
 				console.log(this.ruleForm);
 				this.$emit('submitForm',this.ruleForm)
 			},
-			resetForm(){
-				this.$refs['ruleForm'].resetFields();
-				this.textVal = ''
+			resetForm(formName){
+				this.$refs[formName].resetFields();
+				this.textVal = '';
+				this.checkedSuffix = true;
+				this.ruleForm.key = '';
 			},
 			togType1(val){
 				if(val){

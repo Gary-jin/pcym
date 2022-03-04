@@ -35,6 +35,9 @@
 				<el-button @click="close" type="primary">去结算</el-button>
 			</view>
 		</view>
+		
+	
+		
 	</view>
 </template>
 
@@ -70,7 +73,8 @@
 					{value:'8年',val:8},
 					{value:'9年',val:9},
 					{value:'10年',val:10}
-				]
+				],
+				hidden:true
 			}
 		},
 		mounted() {
@@ -78,8 +82,41 @@
 			this.tableData.push(this.parameter)
 		},
 		methods: {
+			...mapActions(['getUserInfo']),
 			close(){
-				console.log(this.years);
+				let that = this;
+				let option = {
+					domain: that.parameter.domain,
+					period: that.years,
+					expire_time : that.parameter.delete_date
+				}
+				that.$http('order.domainRecharge',{
+					...option
+				}).then(res => {
+					if (res.code === 1) {
+						uni.showModal({
+							title: '提示',
+							content: '是否确定续费!',
+							success: function (e) {
+								if (e.confirm) {
+									that.pay(res.data)
+								} 
+							}
+						});
+					} else{
+						that.$util.showErrorMsg(res.msg);
+					}
+				});
+			},
+			pay(id){
+				this.$http('order.walletPay',{
+					id
+				}).then(res => {
+					if (res.code === 1) {
+						this.getUserInfo()
+					}
+					this.$util.showErrorMsg(res.msg);
+				})
 			},
 			goPath(val,item){
 				let option ={
@@ -87,7 +124,7 @@
 					item: item
 				}
 				this.$emit('changeTal',option)
-			}
+			},
 		}
 	}
 </script>
