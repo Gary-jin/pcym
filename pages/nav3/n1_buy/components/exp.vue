@@ -35,13 +35,13 @@
 		<view class="core">
 			<view class="pagBox">
 				<view class="pagL">
-					 <el-checkbox @change="toggleSelection(checked)" v-model="checked">全选</el-checkbox>
+					 <!-- <el-checkbox @change="toggleSelection(checked)" v-model="checked">全选</el-checkbox>
 					 <el-button
 					   @click="derive"
 						 class="btn"
 					   type="primary">
 					   批量导出
-					 </el-button>
+					 </el-button> -->
 				</view>
 				<view class="pagR">
 					<el-pagination
@@ -143,7 +143,7 @@
 				this.getList()
 			},
 			handleCurrentChange(val) {
-				this.pagin.pagesize = val
+				this.pagin.page = val
 				this.getList()
 			}
 		}

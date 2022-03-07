@@ -18,7 +18,7 @@
 					:data="tableData"
 					style="width: 100%;padding: 0 20px;"
 					max-height="250">
-					<el-table-column prop="domain" label="域名"></el-table-column>
+					<el-table-column prop="domain" label="域名" align="center" width="180px"></el-table-column>
 					<el-table-column prop="updatetime" label="修改时间"></el-table-column>
 					<el-table-column prop="dns" label="DNS"></el-table-column>
 					
@@ -31,11 +31,11 @@
 					<el-pagination
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page="4"
-						:page-sizes="[100, 200, 300, 400]"
-						:page-size="100"
+						:current-page="pagin.page"
+						:page-sizes="[50, 100, 200]"
+						:page-size="pagin.pagesize"
 						layout="total, sizes, prev, pager, next, jumper"
-						:total="400">
+						:total="totalNum">
 					</el-pagination>
 				</view>
 			</view>	
@@ -104,7 +104,12 @@
 						{ required: true, message: '请输入DNS', trigger: 'blur' },
 					]
 				},
-				numLength: 0
+				numLength: 0,
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
+				},
 			}
 		},
 		mounted() {
@@ -117,11 +122,20 @@
 		methods: {
 			groupList(){
 				let that = this;
-				that.$http('member.updateDnsLog').then(res => {
+				that.$http('member.updateDnsLog',{...that.pagin}).then(res => {
 					if (res.code === 1) {
-						this.tableData = res.data
+						that.tableData = res.data.data
+						that.totalNum = res.data.total
 					}
 				});
+			},
+			handleSizeChange(val) {
+				this.pagin.pagesize = val
+				this.groupList()
+			},
+			handleCurrentChange(val) {
+				this.pagin.page = val
+				this.groupList()
 			},
 			handleSelect(e){
 				this.tabNum = e

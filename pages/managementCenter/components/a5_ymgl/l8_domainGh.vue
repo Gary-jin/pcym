@@ -12,37 +12,21 @@
 		  <el-menu-item index="2">域名过户记录</el-menu-item>
 		</el-menu>
 		<view v-if="tabNum=='2'">
-			<view class="fenziBox">
-				<el-input v-model="input" ></el-input>
-				<el-button @click="addGroup" type="primary">添加新分组</el-button>
-			</view>
 			<template>
 				<el-table
 					ref="multipleTable"
-					:data="mouldList"
-					style="width: 100%;padding: 0 20px;"
-					max-height="250">
-					<el-table-column prop="name" label="分组名称"></el-table-column>
-					<el-table-column prop="date2" label="域名数量"></el-table-column>
+					:data="tableData"
+					style="width: 100%;padding: 0 20px;">
+					
 					<el-table-column
-						label="操作"
-						width="120">
+						label="域名">
 						<template slot-scope="scope">
-							<el-button
-								@click.native.prevent="goDetail(scope.$index, mouldList[scope.$index])"
-								type="text"
-								size="small">
-								修改
-							</el-button>
-							<el-button
-								@click.native.prevent="goDetail(scope.$index, mouldList[scope.$index])"
-								type="text"
-								size="small">
-								删除
-							</el-button>
+							<view class="elip" @click="popShow(tableData[scope.$index])">
+								{{scope.row.domain}}
+							</view>
 						</template>
 					</el-table-column>
-					
+					<el-table-column prop="updatetime" label="提交时间"></el-table-column>
 				</el-table>
 			</template>
 			<view class="pagBox">
@@ -52,11 +36,11 @@
 					<el-pagination
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page="4"
-						:page-sizes="[100, 200, 300, 400]"
-						:page-size="100"
+						:current-page="pagin.page"
+						:page-sizes="[50, 100, 200]"
+						:page-size="pagin.pagesize"
 						layout="total, sizes, prev, pager, next, jumper"
-						:total="400">
+						:total="totalNum">
 					</el-pagination>
 				</view>
 			</view>	
@@ -65,7 +49,7 @@
 		<view class="d_f" v-if="tabNum=='1'">
 			<view class="formBox">
 				<el-form ref="form" :rules="rules" :model="form" label-width="130px">
-					<el-form-item label="域名" prop="domains">
+					<el-form-item label="域名" prop="domain">
 						<el-input
 						  type="textarea"
 						  :rows="4"
@@ -87,6 +71,20 @@
 				</el-form>				
 			</view>
 		</view>
+		
+		<qj-dialog :hidden="hidden" :title="'共('+popShowList.length+')条'" :hideFooter="false" 
+			  :showConfrim="false" :width="400" :height="150"
+		 @close="closeDialog" @cancel="closeDialog" >
+			<view class="popupBox">
+				<scroll-view class="scroll-Y" scroll-y="true">
+					<view class="item" v-for="(item,index) in popShowList" :key="index">
+						 <text>{{index+1}}</text> {{item}}
+					</view>
+				</scroll-view>
+			</view>
+		</qj-dialog>
+		
+		
 	</view>
 </template>
 
@@ -100,37 +98,44 @@
 				tabNum:'1',
 				input:'',
 				mouldList:[],
+				tableData:[],
 				textVal:'',
 				form: {
-					domains: [],
+					domain: [],
 					mould_id:''
 				},
 				rules:{
 					mould_id: [
 						{ required: true, message: '请选择模板', trigger: 'change' }
 					],
-					domains: [
+					domain: [
 						{ required: true, message: '请填写域名', trigger: 'blur' }
 					]
 				},
-				numLength: 0
+				numLength: 0,
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
+				},
+				hidden: false,
+				popShowList:[]
 			}
 		},
 		mounted() {
 			this.getMouldList()
+			this.getList()
 		},
 		methods: {
-			addGroup() {
+			getList(){
 				let that = this;
-				if(!that.input){
-					that.$util.showErrorMsg('请填写分组名称');
-					return
-				}
-				that.$http('member.addGroup', {group_name:that.input}, '').then(res => {
+				that.$http('member.updateContactLog', 
+					{
+						...that.pagin
+					}).then(res => {
 					if (res.code === 1) {
-						that.$util.showErrorMsg('添加成功');
-					}else{
-						that.$util.showErrorMsg(res.msg);
+						that.tableData = res.data.data
+						that.totalNum = res.data.total
 					}
 				});
 			},
@@ -149,15 +154,32 @@
 				console.log(this.form);
 				this.$refs['form'].validate((valid) => {
 					if (valid) {
-						this.$http('member.domainGroup',{...this.form}).then(res => {
+						this.$http('member.updateContact',{...this.form}).then(res => {
 							this.$util.showErrorMsg(res.msg);
+							this.getList()
 						});
 					} 
 				});
 			},
 			changeRow(val){
 				this.numLength = this.$util.textareaLength(val);
-				this.form.domains = this.$util.textareaList(val);
+				this.form.domain = this.$util.textareaList(val);
+			},
+			handleSizeChange(val) {
+				this.pagin.pagesize = val
+				this.getList()
+			},
+			handleCurrentChange(val) {
+				this.pagin.page = val
+				this.getList()
+			},
+			closeDialog(){
+				this.hidden = false
+			},
+			popShow(item){
+				console.log(item);
+				this.popShowList = item.domains
+				this.hidden = true
 			}
 		}
 	}
@@ -203,5 +225,24 @@
 		.numSize{
 			color: $text-color-main;
 		}
+	}
+	.popupBox{
+		width: 100%;
+		height: 100%;
+		.scroll-Y{
+			height: 100%;
+			padding:0 20px;
+			.item{
+				padding: 5px 0;
+				text{
+					padding: 0 15px;
+					color: $text-color-main;
+				}
+			}
+		}
+	}
+	.elip{
+		color: $text-color-main;
+		cursor:pointer;
 	}
 </style>

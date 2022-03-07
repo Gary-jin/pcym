@@ -52,11 +52,11 @@
 					<el-pagination
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page="4"
-						:page-sizes="[100, 200, 300, 400]"
-						:page-size="100"
+						:current-page="pagin.page"
+						:page-sizes="[50, 100, 200]"
+						:page-size="pagin.pagesize"
 						layout="total, sizes, prev, pager, next, jumper"
-						:total="400">
+						:total="totalNum">
 					</el-pagination>
 				</view>
 			</view>	
@@ -113,7 +113,12 @@
 						{ required: true, message: '请填写域名', trigger: 'blur' }
 					]
 				},
-				numLength: 0
+				numLength: 0,
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
+				},
 			}
 		},
 		mounted() {
@@ -137,9 +142,10 @@
 			},
 			groupList(){
 				let that = this;
-				that.$http('member.groupList').then(res => {
+				that.$http('member.groupList',{...that.pagin}).then(res => {
 					if (res.code === 1) {
-						this.tableData = res.data
+						that.tableData = res.data.data
+						that.totalNum = res.data.total
 					}
 				});
 			},
@@ -159,6 +165,14 @@
 			changeRow(val){
 				this.numLength = this.$util.textareaLength(val);
 				this.form.domains = this.$util.textareaList(val);
+			},
+			handleSizeChange(val) {
+				this.pagin.pagesize = val
+				this.groupList()
+			},
+			handleCurrentChange(val) {
+				this.pagin.page = val
+				this.groupList()
 			}
 		}
 	}

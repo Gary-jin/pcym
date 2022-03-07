@@ -13,15 +13,15 @@
 		</el-menu>
 		<view v-if="tabNum=='1'">
 			<view class="fenziBox">
-				<text style="margin-left: 10px;">关键字：</text>
-				<el-input
-					size="small"
-					style="width: 200px;margin-right: 10px;"
-				  placeholder="请输入内容"
-				  v-model="record.textarea">
-				</el-input>
-				<el-button type="primary" size="small">搜索</el-button>
-				<el-button type="primary" size="small" plain>重置</el-button>
+				<el-form ref="formSea" :model="search" :rules="searchRules" label-width="80px">
+				  <el-form-item label="关键字" prop="key">
+				    <el-input v-model="search.key" size="small"
+						 placeholder="请输入内容"
+						></el-input>
+				  </el-form-item>
+				</el-form>
+				<el-button type="primary" @click="onSubmitSea" size="small">搜索</el-button>
+				<el-button type="primary" @click="resetFormSea" size="small" plain>重置</el-button>
 			</view>
 			<template>
 				<el-table
@@ -249,8 +249,13 @@
 					
 				},
 				identityList: [ ], //证件列表
-				record:{//记录
-					textarea:''
+				search:{
+					key:''
+				},
+				searchRules:{
+					key: [
+						{ required: true, message: '请填写关键字', trigger: 'blur' }
+					],
 				},
 				numLength: 0,
 				typeBtn:'warning',
@@ -278,7 +283,7 @@
 			getMouldList(){
 				let that = this;
 				that.$http('member.mouldList',
-					{...that.pagin}).then(res => {
+					{...that.pagin,...that.search}).then(res => {
 					if (res.code === 1) {
 						that.tableData = res.data.data
 						that.totalNum = res.data.total
@@ -353,9 +358,19 @@
 				this.getMouldList()
 			},
 			handleCurrentChange(val) {
-				this.pagin.pagesize = val
+				this.pagin.page = val
 				this.getMouldList()
-			}
+			},
+			onSubmitSea() {
+				this.$refs['formSea'].validate((valid) => {
+					if (valid) {
+						this.getMouldList()
+					} 
+				});
+			},
+			resetFormSea() {
+				this.$refs['formSea'].resetFields();
+			},
 		}
 	}
 </script>

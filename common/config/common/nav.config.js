@@ -210,21 +210,21 @@ export default {
 					itemVal:'5-3',
 					linkUrl:''
 				},
-				{
-					name:'域名转入',
-					itemVal:'5-4',
-					linkUrl:''
-				},
-				{
-					name:'域名转回',
-					itemVal:'5-5',
-					linkUrl:''
-				},
-				{
-					name:'外部域名入库',
-					itemVal:'5-6',
-					linkUrl:''
-				},
+				// {
+				// 	name:'域名转入',
+				// 	itemVal:'5-4',
+				// 	linkUrl:''
+				// },
+				// {
+				// 	name:'域名转回',
+				// 	itemVal:'5-5',
+				// 	linkUrl:''
+				// },
+				// {
+				// 	name:'外部域名入库',
+				// 	itemVal:'5-6',
+				// 	linkUrl:''
+				// },
 				{
 					name:'域名过户',
 					itemVal:'5-8',
@@ -233,6 +233,11 @@ export default {
 				{
 					name:'修改DNS',
 					itemVal:'5-9',
+					linkUrl:''
+				},
+				{
+					name:'域名PUSH',
+					itemVal:'5-10',
 					linkUrl:''
 				}
 			]

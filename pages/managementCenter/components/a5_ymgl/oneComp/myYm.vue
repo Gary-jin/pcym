@@ -121,6 +121,14 @@
 					}
 				});
 			},
+			handleSizeChange(val) {
+				this.pagin.pagesize = val
+				this.getList()
+			},
+			handleCurrentChange(val) {
+				this.pagin.page = val
+				this.getList()
+			},
 			groupList(){
 				let that = this;
 				that.$http('member.groupList').then(res => {

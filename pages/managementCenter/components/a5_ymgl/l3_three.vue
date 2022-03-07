@@ -39,20 +39,19 @@
 					<el-table-column prop="date1" label="分组名称"></el-table-column>
 					<el-table-column prop="date2" label="域名数量"></el-table-column>
 					<el-table-column
-						label="操作"
-						width="120">
+						label="操作">
 						<template slot-scope="scope">
 							<el-button
 								@click.native.prevent="goDetail(scope.$index, tableData[scope.$index])"
 								type="text"
 								size="small">
-								修改
+								取消
 							</el-button>
 							<el-button
 								@click.native.prevent="goDetail(scope.$index, tableData[scope.$index])"
 								type="text"
 								size="small">
-								删除
+								重新发送转移码
 							</el-button>
 						</template>
 					</el-table-column>
@@ -66,11 +65,11 @@
 					<el-pagination
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page="4"
-						:page-sizes="[100, 200, 300, 400]"
-						:page-size="100"
+						:current-page="pagin.page"
+						:page-sizes="[50, 100, 200]"
+						:page-size="pagin.pagesize"
 						layout="total, sizes, prev, pager, next, jumper"
-						:total="400">
+						:total="totalNum">
 					</el-pagination>
 				</view>
 			</view>	
@@ -95,7 +94,7 @@
 							</el-input>
 							<text>您已经填写 <text class="numSize">{{numLength}}</text> 个域名，还可添加 <text class="numSize">{{1000-numLength}}</text> 个</text>
 						</el-form-item>
-						<view class="d_f_c">
+					<!-- 	<view class="d_f_c">
 							<el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
 								<i class="iconfontAl icon-wenhao1"></i>
 							</el-tooltip>
@@ -103,16 +102,16 @@
 								13045676541
 								<el-button style="margin-left: 30px;" :type="typeBtn" plain size="small">获取验证码</el-button>
 							</el-form-item>						
-						</view>
-						<el-form-item label="验证码" >
+						</view> -->
+						<!-- <el-form-item label="验证码" >
 							<el-input v-model="input" style="width: 280px;" placeholder="请输入内容" size="small"></el-input>
 							<view>
 								 <el-checkbox v-model="checked"></el-checkbox>
 								勾选后，在60分钟内相同业务类型，不需要再次验证。
 							</view>
-						</el-form-item>	
+						</el-form-item>	 -->
 						<el-form-item>
-							<el-button type="primary" @click="onSubmit">确认转出</el-button>
+							<el-button type="primary" @click="onSubmit('0')">确认转出</el-button>
 						</el-form-item>
 					</el-form>				
 				</view>
@@ -152,7 +151,11 @@
 				numLength: 0,
 				typeBtn:'warning',
 				checked:false,
-				
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
+				},
 			}
 		},
 		onLoad() {
@@ -167,13 +170,36 @@
 			handleSelect(e){
 				this.tabNum = e
 			},
-			onSubmit() {
+			onSubmit(val) {
 				console.log(this.checked);
 				console.log('submit!');
 			},
 			changeRow(val){
 				this.numLength = this.$util.textareaLength(val);
+				this.form.domain = this.$util.textareaList(val);
 			},
+			// 0：转出申请，2：取消申请，9：重新发送转移码
+			operateItem(){
+				let that = this;
+				that.$http('member.updateContactLog', 
+					{
+						domain:'',
+						type: ''
+					}).then(res => {
+					if (res.code === 1) {
+						that.tableData = res.data.data
+						that.totalNum = res.data.total
+					}
+				});
+			},
+			handleSizeChange(val) {
+				this.pagin.pagesize = val
+				this.getList()
+			},
+			handleCurrentChange(val) {
+				this.pagin.page = val
+				this.getList()
+			}
 		}
 	}
 </script>

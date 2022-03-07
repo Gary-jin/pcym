@@ -54,7 +54,7 @@
 			  </view>
 			</el-form-item>
 			<el-form-item>
-			   <el-button type="primary">域名PUSH</el-button>
+			   <el-button @click="changePush()" type="primary">域名PUSH</el-button>
 				 <el-button type="primary" plain>域名出售</el-button>
 			</el-form-item>
 		</el-form>
@@ -93,7 +93,10 @@
 				this.setdomainList(this.parameter)
 				uni.$emit('upTypeTab',{itemVal:'5-9'})
 			},
-			
+			changePush(){
+				this.setdomainList(this.parameter)
+				uni.$emit('upTypeTab',{itemVal:'5-10'})
+			}
 		},
 	}
 </script>

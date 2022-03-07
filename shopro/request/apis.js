@@ -194,6 +194,24 @@ export default {
 			method: "GET",
 			// desc: ' dns修改记录 ',
 		},
+		updateContact: {
+			url: "member_domains/updateContact",
+			auth: true,
+			method: "POST",
+			// desc: ' 域名过户 ',
+		},
+		updateContactLog: {
+			url: "member_domains/updateContactLog",
+			auth: true,
+			method: "GET",
+			// desc: ' 域名过户 list',
+		},
+		transferOut: {
+			url: "member_domains/transferOut",
+			auth: true,
+			method: "POST",
+			// desc: ' 域名转出',
+		},
 
 	},
 

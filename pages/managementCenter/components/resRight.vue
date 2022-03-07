@@ -24,6 +24,7 @@
 		<ymgl-mb v-if="tabNum=='5-7'"></ymgl-mb>
 		<domain-gh v-if="tabNum=='5-8'"></domain-gh>
 		<dns-change v-if="tabNum=='5-9'"></dns-change>
+		<ym-push v-if="tabNum=='5-10'"></ym-push>
 		<!-- 域名经纪 -->
 		<middleman-a v-if="tabNum=='6-1'"></middleman-a>
 		<middleman-b v-if="tabNum=='6-2'"></middleman-b>
@@ -55,6 +56,7 @@
 	import ymglMb from './a5_ymgl/l7_muban.vue';
 	import domainGh from './a5_ymgl/l8_domainGh.vue';
 	import dnsChange from './a5_ymgl/l9_dnsChange.vue';
+	import ymPush from './a5_ymgl/l10_ymPush.vue';
 	// 域名经纪
 	import middlemanA from './a6_ymMiddleman/ym1_sq.vue';
 	import middlemanB from './a6_ymMiddleman/ym2_list.vue';
@@ -64,7 +66,7 @@
 			userA,userB,userC,userD,
 			moneyA,moneyB,moneyC,moneyD,
 			ymA,ymB,ymC,
-			ymglA,ymglB,ymglC,ymglD,ymglE,ymglF,ymglMb,domainGh,dnsChange,
+			ymglA,ymglB,ymglC,ymglD,ymglE,ymglF,ymglMb,domainGh,dnsChange,ymPush,
 			middlemanA,middlemanB
 		},
 		props: {
