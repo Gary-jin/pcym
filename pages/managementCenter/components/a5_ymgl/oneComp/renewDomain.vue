@@ -109,7 +109,7 @@
 				});
 			},
 			pay(id){
-				this.$http('order.walletPay',{
+				this.$http('pay.walletPay',{
 					id
 				}).then(res => {
 					if (res.code === 1) {

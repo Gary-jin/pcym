@@ -20,45 +20,57 @@
 				<view class="titR"></view>
 			</view>
 			<view class="czBox">
-				<view class="czItem">商品名称：20.com 预付款</view>
-				<view class="czItem">商品名称：<text>*在线充值不需要任何手续费</text></view>
+				<view class="czItem">商品名称： 预付款</view>
+				<view class="czItem">支付方式：<text>*在线充值不需要任何手续费</text></view>
 				<view class="czItem2">
-					<el-radio v-model="radio" label="1">支付宝</el-radio>
-					<el-radio v-model="radio" label="2">微信支付</el-radio>
+					<el-radio v-model="type" label="alipay">支付宝</el-radio>
+					<el-radio v-model="type" label="wechat">微信支付</el-radio>
 				</view>
 				<view class="czItem3">
-					商品名称：
-					<el-input v-model="input" :placeholder="plac"></el-input>
-					<el-button type="warning">充值</el-button>
+					充值金额：
+					<el-input v-model="money" :placeholder="plac"></el-input>
+					<el-button type="warning" @click="getOrderId">充值</el-button>
 				</view>
 			</view>
+			
 		</view>
 	</view>
 </template>
 
 <script>
-
+	import { API_URL } from '@/env.js'
 	export default {
 		components: {
 			
 		},
 		data() {
 			return {
-				input:'',
-				plac:'最小充值金额:10元',
-				radio: '1'
+				money:'',
+				type: 'alipay',
+				plac:'充值金额',
 			}
 		},
-		onLoad() {
-		},
-		onShow() {
-			
-		},
-		onHide() {
+		mounted() {
 			
 		},
 		methods: {
-			
+			getOrderId(){
+				let that = this;
+				if(!that.money){
+					this.$util.showErrorMsg('请输入充值金额！');
+					return
+				}
+				that.$http('order.chargeOrder',{
+						money:that.money,
+						type:that.type
+					}).then(res => {
+					if (res.code === 1) {
+						window.open(API_URL+`pay/getQrcode?id=${res.data}`,'_blank');
+					} else{
+						that.$util.showErrorMsg(res.msg);
+					}
+				});
+			},
 		}
 	}
 </script>

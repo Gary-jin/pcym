@@ -10,6 +10,7 @@
 		  active-text-color="#4088FF">
 		  <el-menu-item index="1">我要提现</el-menu-item>
 			<el-menu-item index="2">提现记录</el-menu-item>
+			<el-menu-item index="3">设置提现账户</el-menu-item>
 		</el-menu>
 		
 		<view class="IdCardBoxDetail">
@@ -33,7 +34,7 @@
 				<!--  -->
 				<view class="formBox">
 					<view class="rowbox">
-						<view class="title f_cc">认证类型：</view>
+						<view class="title f_cc">提现类型：</view>
 						<view class="subBox">
 							<el-select  size="small" v-model="form.type" placeholder="请选择">
 								<el-option
@@ -45,43 +46,28 @@
 							</el-select>
 						</view>
 					</view>
-					<!-- 营业执照 -->
-					<block v-if="form.type == '2'">
-						<view class="rowbox">
-							<view class="title f_cc">收款方式:</view>
-							<view class="subBox ">
-								<el-input v-model="form.input1" size="small" placeholder="请填写公司名称" ></el-input>
-							</view>
-						</view>
-						<view class="rowbox">
-							<view class="title f_cc">收款人:</view>
-							<view class="subBox ">
-								林宝军
-							</view>
-						</view>
-						<!-- <view class="rowbox">
-							<view class="title f_cc">银行名称:</view>
-							<view class="subBox ">
-								<el-input v-model="form.input1" size="small" placeholder="请填写银行名称" ></el-input>
-							</view>
-						</view> -->
-					</block>
-					<!--  -->
 					<view class="rowbox">
 						<view class="title f_cc">可提现金额：</view>
 						<view class="subBox ">
 							<view class="subBox1">
-								<el-input v-model="form.input1" size="small" placeholder=""请输入金额></el-input>
-								<el-button type="primary" size="small">主要按钮</el-button>
-								<text class="tex1">0.00元（免手续费）</text>
-								<text class="tex2">0.00元（手续费1%）</text>
+								<el-input v-model="form.money" size="small" placeholder=""请输入金额></el-input>
+								<el-button type="primary" @click="apply(form.money)" size="small">提现</el-button>
+								<!-- <text class="tex1">0.00元（免手续费）</text>
+								<text class="tex2">0.00元（手续费1%）</text> -->
 							</view>
 							<view class="subBox2">
-								[手续费最低1元] [单笔提现限额：最低10元，最高20万元，单日限额最高100万元]
+								[提现手续费1%，最低2元] 
+								<!-- [单笔提现限额：最低10元，最高20万元，单日限额最高100万元] -->
 							</view>
 						</view>
 					</view>
-					<view class="rowbox">
+					<view class="rowbox" v-if="!senReal">
+						<view class="title f_cc"></view>
+						<view class="subBox ">
+							请先设置提现账户
+						</view>
+					</view>
+					<!-- <view class="rowbox">
 						<view class="title f_cc">手续费：</view>
 						<view class="subBox ">
 							0元
@@ -92,7 +78,7 @@
 						<view class="subBox ">
 							0元 <text style="padding-left: 80px;color: color: #777777;">已给您计算出扣除手续费后的到账金额。</text>
 						</view>
-					</view>
+					</view> -->
 				</view>
 			</block>
 			
@@ -100,18 +86,21 @@
 			<view class="tabBox" v-if="tabNum=='2'">
 				<template>
 				  <el-table ref="multipleTable" :data="tableData" stripe >
-						<el-table-column type="selection" width="55"></el-table-column>
-						<el-table-column prop="date1" label="状态" width="100"></el-table-column>
-						<el-table-column prop="date2" label="类型" width="100"></el-table-column>
-				    <el-table-column label="标题" >
+						<el-table-column prop="real_name" label="申请人" ></el-table-column>
+						<el-table-column prop="date4" label="时间" >
 							<template slot-scope="scope">
-								<el-button type="text" size="small"
-									@click.native.prevent="goDetail(scope.$index, tableData[scope.$index])">
-									{{ scope.row.date3 }}
-								</el-button>
+								
+								{{$util.dateFormat('YYYY-mm-dd HH:MM', scope.row.updatetime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="date4" label="时间" width="150" fixed="right"></el-table-column>
+						<el-table-column label="状态" >
+							<template slot-scope="scope">
+								<text v-if="scope.row.status == 0">申请中</text>	
+								<text v-if="scope.row.status == 1">已打款,</text>	
+								<text v-if="scope.row.status == -1">已拒绝</text>	
+							</template>
+						</el-table-column>
+						<el-table-column prop="money" label="提现金额" ></el-table-column>
 				  </el-table>
 				</template>
 				<view>
@@ -121,15 +110,37 @@
 							<el-pagination
 								@size-change="handleSizeChange"
 								@current-change="handleCurrentChange"
-								:current-page="4"
-								:page-sizes="[100, 200, 300, 400]"
-								:page-size="100"
+								:current-page="pagin.page"
+								:page-sizes="[50, 100, 200]"
+								:page-size="pagin.pagesize"
 								layout="total, sizes, prev, pager, next, jumper"
-								:total="400">
+								:total="totalNum">
 							</el-pagination>
 						</view>
 					</view>			
 				</view>
+			</view>
+			
+			<!--  -->
+			<view class="account" v-if="tabNum=='3'">
+				<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+				  <el-form-item label="真实姓名" prop="real_name">
+				    <el-input v-model="ruleForm.real_name" size="small"></el-input>
+				  </el-form-item>
+					<el-form-item label="银行全称" prop="bank_name">
+					  <el-input v-model="ruleForm.bank_name" size="small"></el-input>
+					</el-form-item>
+					<el-form-item label="卡号" prop="card_no">
+					  <el-input v-model="ruleForm.card_no" size="small"></el-input>
+					</el-form-item>
+					<el-form-item label="开户行地址" prop="address">
+					  <el-input v-model="ruleForm.address" size="small"></el-input>
+					</el-form-item>
+					 <el-form-item >
+					    <el-button type="primary" @click="estAccount">{{senReal?'修改':'确定'}}</el-button>
+					  </el-form-item>
+				</el-form>
+				
 			</view>
 			
 		</view>
@@ -145,58 +156,112 @@
 		data() {
 			return {
 				tabNum:'1',
-				tableData: [{
-					date1: '未读',
-					date2: '系统消息',
-					date3: '您的账号存在登录异常情况，请确认',
-					date4: '2016-05-02'
-				},{
-					date1: '未读',
-					date2: '系统消息',
-					date3: '您的账号存在登录异常情况，请确认',
-					date4: '2016-05-02'
-				},{
-					date1: '未读',
-					date2: '系统消息',
-					date3: '您的账号存在登录异常情况，请确认',
-					date4: '2016-05-02'
-				}],
+				tableData: [],
 				checked: false,
-				options: [{
-					value: '1',
-					label: '微信'
-				},  {
-					value: '2',
-					label: '支付宝'
-				}],
+				options: [
+					// {
+					// value: '1',
+					// label: '微信'
+				// },  {
+				// 	value: '2',
+				// 	label: '支付宝'
+				// },
+					{
+						value: '3',
+						label: '银行卡'
+					}
+				],
 				form:{
-					type:'1',
-					input1:'',
-					input2:'',
-					idz:'',
-					idf:''
-				}
-				
+					type:'3',
+					money:''
+				},
+				ruleForm:{
+					real_name:'',
+					bank_name:'',
+					card_no:'',
+					address:''
+				},
+				rules:{
+					real_name: [
+						{ required: true, message: '请填写真实姓名', trigger: 'blur' }
+					],
+					bank_name: [
+						{ required: true, message: '请填写银行全称', trigger: 'blur' }
+					],
+					card_no: [
+						{ required: true, message: '请填写卡号', trigger: 'blur' }
+					],
+					address: [
+						{ required: true, message: '请填写开户行地址', trigger: 'blur' }
+					]
+				},
+				senReal:false,
+				totalNum: 0,
+				pagin: {
+					page: 1, //页码
+					pagesize: 50 //条数
+				},
 			}
+		},
+		mounted() {
+			this.sense()
+			this.applyList()
 		},
 		methods: {
 			handleSelect(e){
-				console.log(e);
 				this.tabNum = e
 			},
-			cheImg(val){
+			estAccount(){
+				 this.$refs['ruleForm'].validate((valid) => {
+					  if (valid) {
+								this.$http('apply.editBandCard',{
+									...this.ruleForm
+								}).then(res => {
+									this.$util.showErrorMsg(res.msg);
+								})
+						}
+				 })
+			},
+			sense(){
+				this.$http('apply.bandCard').then(res => {
+					if(res.code ==1){
+						this.senReal = true;
+						this.ruleForm.real_name = res.data.real_name
+						this.ruleForm.bank_name = res.data.bank_name
+						this.ruleForm.card_no = res.data.card_no
+						this.ruleForm.address = res.data.address
+					}
+				})
+			},
+			//申请提现
+			apply(money){
+				if(!this.senReal){
+					this.$util.showErrorMsg('请先设置提现账户');
+					return
+				}
+				this.$http('apply.apply',{
+					money
+				}).then(res => {
+					this.$util.showErrorMsg(res.msg);
+					this.applyList()
+				})
+			},
+			applyList(){
 				let that = this;
-				uni.chooseImage({
-				    count: 1, 
-				    success: function (res) {
-				        console.log(JSON.stringify(res.tempFilePaths));
-								if(val==1){
-									that.form.idz = res.tempFilePaths[0]
-								} else {
-									that.form.idf = res.tempFilePaths[0]
-								}
-				    }
-				});
+				that.$http('apply.index',{...that.pagin}).then(res => {
+					if(res.code ==1){
+						that.tableData = res.data.data
+						that.totalNum = res.data.total
+					}
+				})
+			},
+			handleSizeChange(val) {
+				this.pagin.pagesize = val
+				this.applyList()
+			},
+			handleCurrentChange(val) {
+				this.pagin.page = val
+				this.applyList()
 			}
 		}
 	}
@@ -343,5 +408,30 @@
 	
 	.tabBox{
 		margin-top: 20px;
+	}
+	
+	.pagBox{
+			padding: 20px 14px;
+			background-color: #FFFFFF;
+			margin-bottom: 40px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			.pagL{
+				.el-select{
+					width: 150px;
+					margin-left: 5px;
+				}
+				.btn{
+					margin-left: 20px;
+				}
+			}
+		}
+		
+	.account{
+		background: #FFFFFF;
+		.el-input{
+			width: 180px;
+		}
 	}
 </style>

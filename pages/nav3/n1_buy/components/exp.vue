@@ -4,8 +4,8 @@
 		<view style="height: 20px;"></view>
 		<view class="core expCore">
 			<template>
-			  <el-table ref="multipleTable" :data="list" style="width: 100%" >
-					<el-table-column type="selection" width="55"></el-table-column>
+			  <el-table ref="multipleTable" :data="list" style="width: 100%" stripe>
+					<!-- <el-table-column type="selection" width="55"></el-table-column> -->
 			    <el-table-column prop="domain" label="域名"></el-table-column>
 					<el-table-column prop="desc" label="简介"></el-table-column>
 					<el-table-column prop="length" label="长度" sortable></el-table-column>

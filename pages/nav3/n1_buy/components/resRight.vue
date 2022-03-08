@@ -134,7 +134,7 @@
 			},
 			submit() {
 				let that = this;
-				that.$http('order.walletPay', {
+				that.$http('pay.walletPay', {
 					id: that.orderId
 				}).then(res => {
 					if (res.code === 1) {

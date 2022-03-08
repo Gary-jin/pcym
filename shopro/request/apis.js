@@ -243,19 +243,59 @@ export default {
 			method: "POST",
 			// desc: '域名续费 提交订单',
 		},
-		walletPay: {
-			url: "pay/walletPay",
-			auth: true,
-			method: "GET",
-			// desc: '域名续费 确定续费',
-		},
 		domainOrder: {
 			url: "order/domainOrder",
 			auth: true,
 			method: "POST",
 			// desc: '一口价购买',
 		},
+		chargeOrder: {
+			url: "order/chargeOrder",
+			auth: true,
+			method: "POST",
+			// desc: '充值订单',
+		},
 
+	},
+	pay:{
+		walletPay: {
+			url: "pay/walletPay",
+			auth: true,
+			method: "GET",
+			// desc: '域名续费 确定续费',
+		},
+		getQrcode: {
+			url: "pay/getQrcode",
+			auth: true,
+			method: "GET",
+			// desc: '一口价购买',
+		},
+	},
+	apply:{
+		editBandCard: {
+			url: "withdraw_apply/editBandCard",
+			auth: true,
+			method: "POST",
+			// desc: ' 添加银行卡',
+		},
+		bandCard: {
+			url: "withdraw_apply/bandCard",
+			auth: true,
+			method: "GET",
+			// desc: ' 银行卡信息',
+		},
+		apply: {
+			url: "withdraw_apply/apply",
+			auth: true,
+			method: "POST",
+			// desc: ' 申请提现',
+		},
+		index: {
+			url: "withdraw_apply/index",
+			auth: true,
+			method: "GET",
+			// desc: ' 提现记录',
+		},
 	}
 
 };

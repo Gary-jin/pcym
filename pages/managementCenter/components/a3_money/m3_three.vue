@@ -9,43 +9,43 @@
 		  text-color="#969696"
 		  active-text-color="#4088FF">
 		  <el-menu-item index="1">资金明细</el-menu-item>
-			<el-menu-item index="2">冻结明细</el-menu-item>
-			<el-menu-item index="3">积分明细</el-menu-item>
+			<!-- <el-menu-item index="2">冻结明细</el-menu-item>
+			<el-menu-item index="3">积分明细</el-menu-item> -->
 		</el-menu>
 		<!--  -->
 		<view class="moneyBox">
 			<view class="moneyLeft">
-				<view class="m1">78945</view>
+				<view class="m1">{{userInfo.money}}</view>
 				<view class="m2">总金额（元）</view>
 			</view>
 			<view class="moneyCen">
 				<view class="cenBox">
-					<view class="c1">78945</view>
+					<view class="c1">{{userInfo.money}}</view>
 					<view class="c2">可用金额(元)</view>
 				</view>
 				<view class="cenBox">
-					<view class="c1">78945</view>
-					<view class="c2">可用金额(元)</view>
+					<view class="c1">0</view>
+					<view class="c2">已冻结金额(元)</view>
 				</view>
 				<view class="cenBox">
-					<view class="c1">78945</view>
-					<view class="c2">可用金额(元)</view>
+					<view class="c1">{{userInfo.money}}</view>
+					<view class="c2">可提现金额(元)</view>
 				</view>
 				<view class="cenBox">
-					<view class="c1">78945</view>
-					<view class="c2">可用金额(元)</view>
+					<view class="c1">0</view>
+					<view class="c2">不可提现金额(元)</view>
 				</view>
-				<view class="cenBox">
-					<view class="c1">78945</view>
-					<view class="c2">可用金额(元)</view>
-				</view>
+				<!-- <view class="cenBox">
+					<view class="c1">0</view>
+					<view class="c2">消费积分</view>
+				</view> -->
 			</view>
 			<view class="moneyRight">
 				<view class="">
-					<el-button type="primary">充值</el-button>
+					<el-button @click="goPath('3-1')" type="primary">充值</el-button>
 				</view>
 				<view class="btnUser">
-					<el-button type="primary" plain>提现</el-button>
+					<el-button @click="goPath('3-4')" type="primary" plain>提现</el-button>
 				</view>
 			</view>
 		</view>
@@ -90,10 +90,17 @@
 </template>
 
 <script>
-
+	import {mapMutations,mapActions,mapState} from 'vuex';
+	
 	export default {
 		components: {
 			
+		},
+		computed: {
+			...mapState({
+				userInfo: ({ user }) => user.userInfo,
+				isLogin: ({ user })  => user.isLogin,
+			})
 		},
 		data() {
 			return {
@@ -125,6 +132,9 @@
 				console.log(e);
 				this.tabNum = e
 			},
+			goPath(val){
+				uni.$emit('upTypeTab',{itemVal:val})
+			}
 		}
 	}
 </script>

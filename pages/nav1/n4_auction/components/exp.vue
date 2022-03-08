@@ -2,7 +2,7 @@
 	<view class="f_cc_ls">
 		<filtra @submitForm="submitForm"></filtra>
 		<view style="height: 20px;"></view>
-		<view class="core">
+		<!-- <view class="core">
 			<view class="derive f_bc">
 				<view class="derLeft">
 					<text class="lTit1">搜索结果（1653）</text>
@@ -12,12 +12,12 @@
 					点击刷新
 				</view>
 			</view>			
-		</view>
+		</view> -->
 		<view class="core expCore">
 			<template>
 			  <el-table
 					ref="multipleTable"
-			    :data="list"
+			    :data="list" stripe
 			    style="width: 100%">
 					<el-table-column label="域名" align="center">
 						<template slot-scope="scope">
